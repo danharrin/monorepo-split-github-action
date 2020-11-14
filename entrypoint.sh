@@ -22,7 +22,7 @@ echo "Cloning '$CLONED_REPOSITORY' repository "
 # Setup git
 git config --global user.email "$USER_EMAIL"
 git config --global user.name "$SPLIT_REPOSITORY_ORGANIZATION"
-git clone -- "https://$API_TOKEN_GITHUB@github.com/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git" "$CLONE_DIR"
+git clone -- "https://$GITHUB_TOKEN@github.com/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git" "$CLONE_DIR"
 ls -la "$CLONE_DIR"
 
 echo "[Note] Cleaning destination repository of old files"
