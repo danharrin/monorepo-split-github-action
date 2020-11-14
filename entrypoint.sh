@@ -69,7 +69,7 @@ then
     note "Publishing tag: ${TAG}"
 
     # if tag already exists in remote
-    TAG_EXISTS_IN_REMOTE=$(git ls-remote <remote-name> refs/tags/$TAG)
+    TAG_EXISTS_IN_REMOTE=$(git ls-remote origin refs/tags/$TAG)
 
     # tag does not exist
     if test -z "$TAG_EXISTS_IN_REMOTE"
