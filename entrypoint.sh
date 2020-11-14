@@ -69,5 +69,5 @@ then
     note "Publishing tag: ${TAG}"
 
     git tag $TAG -m "Publishing tag ${TAG}"
-    git push --quiet origin "${TAG}"
+    git push --quiet origin "${TAG}" --tags
 fi
