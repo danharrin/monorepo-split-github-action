@@ -54,6 +54,7 @@ git push origin --set-upstream master
 if [ ! -d "$TAG" ]
 then
     echo "publishing $TAG"
-    git tag -s $TAG -m "Publishing tag $TAG"
+
+    git tag $TAG -m "Publishing tag $TAG"
     git push --quiet origin $TAG
 fi
