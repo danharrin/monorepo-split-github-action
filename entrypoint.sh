@@ -16,6 +16,8 @@ COMMIT_MESSAGE="$5"
 CLONE_DIR=$(mktemp -d)
 
 echo "Cloning destination git repository"
+CLONED_REPOSITORY="https://github.com/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git"
+echo "$CLONED_REPOSITORY"
 
 # Setup git
 git config --global user.email "$USER_EMAIL"
