@@ -68,6 +68,13 @@ if test ! -z "$TAG"
 then
     note "Publishing tag: ${TAG}"
 
-    git tag $TAG -m "Publishing tag ${TAG}"
-    git push --quiet origin "${TAG}" --tags
+    # if tag already exists in remote
+    TAG_EXISTS_IN_REMOTE=$(git ls-remote <remote-name> refs/tags/$TAG)
+
+    # tag does not exist
+    if test -z "$TAG_EXISTS_IN_REMOTE"
+    then
+        git tag $TAG -m "Publishing tag ${TAG}"
+        git push --quiet origin "${TAG}" --tags
+    fi
 fi
