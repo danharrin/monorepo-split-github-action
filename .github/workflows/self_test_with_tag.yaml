@@ -22,13 +22,19 @@ jobs:
             # this create $TAG environment value
             -   run: echo "TAG=${{ steps.previous_tag.outputs.tag }}" >> $GITHUB_ENV
 
+            -   run: echo ${TAG}
+            -   run: echo $TAG
+            -   run: echo "$TAG"
+            -   run: echo "${TAG}"
+
             -
                 # Uses an action in the root directory
                 uses: ./
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-                    TAG: ${TAG}
                 with:
                     package-directory: 'tests/packages/some-package'
                     split-repository-organization: 'TomasVotruba'
                     split-repository-name: 'github-action-monorepo-split-test'
+                    tag: ${TAG}
+

@@ -29,6 +29,7 @@ runs:
         - ${{ inputs.split-repository-name }}
         - ${{ inputs.user-email }}
         - ${{ inputs.commit-message }}
+        - ${{ inputs.tag }}
 
 branding:
     icon: maximize-2
