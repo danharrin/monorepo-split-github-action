@@ -10,8 +10,8 @@ jobs:
             -
                 uses: actions/checkout@v2
                 # this is required for "WyriHaximus/github-action-get-previous-tag" workflow
-                with:
-                    fetch-depth: 0
+#                with:
+#                    fetch-depth: 0
 
             # see https://github.com/WyriHaximus/github-action-get-previous-tag
             -
