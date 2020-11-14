@@ -63,9 +63,9 @@ note "Pushing git commit"
 git push --quiet origin master
 
 # push tag if present
-if [ ! -z "$TAG" ]; then
-    note "Publishing tag: $TAG"
+if [ -n "$TAG" ]; then
+    note "Publishing tag: ${TAG}"
 
-    git tag "$TAG" -m "Publishing tag $TAG"
-    git push --quiet origin "$TAG"
+    git tag "${TAG}" -m "Publishing tag ${TAG}"
+    git push --quiet origin "${TAG}"
 fi
