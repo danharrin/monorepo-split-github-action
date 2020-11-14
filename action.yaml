@@ -30,3 +30,7 @@ runs:
         - ${{ inputs.split-repository-name }}
         - ${{ inputs.user-email }}
         - ${{ inputs.commit-message }}
+
+branding:
+    icon: maximize-2
+    color: purple
