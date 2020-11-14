@@ -27,6 +27,7 @@ jobs:
                 uses: ./
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                    TAG: ${{ TAG }}
                 with:
                     package-directory: 'tests/packages/some-package'
                     split-repository-organization: 'TomasVotruba'
