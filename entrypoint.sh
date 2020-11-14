@@ -6,7 +6,7 @@ set -e
 # script fails if trying to access to an undefined variable
 set -u
 
-echo "Starts"
+echo "[Note] Starts"
 PACKAGE_DIRECTORY="$1"
 SPLIT_REPOSITORY_ORGANIZATION="$2"
 SPLIT_REPOSITORY_NAME="$3"
@@ -17,7 +17,7 @@ TAG="$6"
 CLONE_DIR=$(mktemp -d)
 
 CLONED_REPOSITORY="https://github.com/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git"
-echo "Cloning '$CLONED_REPOSITORY' repository "
+echo "[Note] Cloning '$CLONED_REPOSITORY' repository "
 
 # Setup git
 git config --global user.email "$USER_EMAIL"
