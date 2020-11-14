@@ -1,0 +1,22 @@
+name: 'Self Test'
+
+on: [push]
+
+jobs:
+    self_test:
+        runs-on: ubuntu-latest
+
+        steps:
+            -
+                uses: actions/checkout@v2
+            -
+                # Uses an action in the root directory
+                uses: ./
+                env:
+                    API_TOKEN_GITHUB: ${{ secrets.ACCESS_TOKEN }}
+                with:
+                    package-directory: 'tests/packages/some-package'
+                    split-repository-organization: 'TomasVotruba/'
+                    split-repository-name: 'github-action-monorepo-split-test'
+
+            -   run: echo ${{ github.event.release.tag_name }}
