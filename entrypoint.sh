@@ -7,6 +7,7 @@ set -e
 set -u
 
 echo "[Note] Starts"
+
 PACKAGE_DIRECTORY="$1"
 SPLIT_REPOSITORY_ORGANIZATION="$2"
 SPLIT_REPOSITORY_NAME="$3"
