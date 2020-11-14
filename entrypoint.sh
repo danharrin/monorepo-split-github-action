@@ -11,8 +11,7 @@ function note()
     MESSAGE=$1;
 
     printf "\n";
-    # \e[33m makes it yellow (see https://misc.flogisoft.com/bash/tip_colors_and_formatting)
-    echo "\e[33m[NOTE] $MESSAGE";
+    echo "[NOTE] $MESSAGE";
     printf "\n";
 }
 
@@ -65,7 +64,7 @@ git push --quiet origin master
 
 # push tag if present
 if [ -z "$TAG" ]; then
-    note "Publishing tag: '$TAG'"
+    note "Publishing tag: $TAG"
 
     git tag "$TAG" -m "Publishing tag $TAG"
     git push --quiet origin "$TAG"
