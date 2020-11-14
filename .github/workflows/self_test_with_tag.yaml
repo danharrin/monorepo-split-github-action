@@ -31,5 +31,5 @@ jobs:
                     package-directory: 'tests/packages/some-package'
                     split-repository-organization: 'TomasVotruba'
                     split-repository-name: 'github-action-monorepo-split-test'
-                    tag: ${{ TAG }}
+                    tag: ${{ steps.previous_tag.outputs.tag }}
 
