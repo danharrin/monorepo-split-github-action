@@ -12,6 +12,7 @@ SPLIT_REPOSITORY_ORGANIZATION="$2"
 SPLIT_REPOSITORY_NAME="$3"
 USER_EMAIL="$4"
 COMMIT_MESSAGE="$5"
+TAG="$6"
 
 CLONE_DIR=$(mktemp -d)
 
@@ -51,3 +52,7 @@ echo "Pushing git commit"
 git push origin --set-upstream "$TARGET_BRANCH"
 
 # push tag if present
+if [ ! -d "$TAG" ]
+then
+    echo "publishing $TAG (@todo)"
+fi

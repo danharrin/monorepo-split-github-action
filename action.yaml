@@ -15,10 +15,12 @@ inputs:
     user-email:
         description: 'Email for the git commit'
         required: true
-
     commit-message:
         description: '[Optional] commit message for the output repository. ORIGIN_COMMIT is replaced by the URL@commit in the origin repo'
         default: 'Package split ORIGIN_COMMIT'
+        required: false
+    tag:
+        description: 'Tag to be published'
         required: false
 
 runs:
@@ -30,6 +32,7 @@ runs:
         - ${{ inputs.split-repository-name }}
         - ${{ inputs.user-email }}
         - ${{ inputs.commit-message }}
+        - ${{ inputs.tag }}
 
 branding:
     icon: maximize-2
