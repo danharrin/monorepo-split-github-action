@@ -53,5 +53,7 @@ git push origin --set-upstream master
 # push tag if present
 if [ ! -d "$TAG" ]
 then
-    echo "publishing $TAG (@todo)"
+    echo "publishing $TAG"
+    git tag -s $TAG -m "Publishing tag $TAG"
+    git push --quiet origin $TAG
 fi
