@@ -16,7 +16,7 @@ jobs:
                     API_TOKEN_GITHUB: ${{ secrets.ACCESS_TOKEN }}
                 with:
                     package-directory: 'tests/packages/some-package'
-                    split-repository-organization: 'TomasVotruba/'
+                    split-repository-organization: 'TomasVotruba'
                     split-repository-name: 'github-action-monorepo-split-test'
 
             -   run: echo ${{ github.event.release.tag_name }}
