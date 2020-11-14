@@ -9,6 +9,7 @@ jobs:
         steps:
             -
                 uses: actions/checkout@v2
+
             -
                 # Uses an action in the root directory
                 uses: ./

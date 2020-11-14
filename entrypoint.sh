@@ -52,7 +52,7 @@ echo "[Note] Pushing git commit"
 git push --quiet origin master
 
 # push tag if present
-if [ ! -z "$TAG" ]
+if [ -n "$TAG" ]
 then
     echo "[Note] Publishing tag: '$TAG'"
 
