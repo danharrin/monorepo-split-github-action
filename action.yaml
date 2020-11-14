@@ -19,6 +19,9 @@ inputs:
         description: '[Optional] commit message for the output repository. ORIGIN_COMMIT is replaced by the URL@commit in the origin repo'
         default: 'Package split ORIGIN_COMMIT'
         required: false
+    tag:
+        description: '[Optional] Tag to be releasd'
+        required: false
 
 runs:
     using: 'docker'
