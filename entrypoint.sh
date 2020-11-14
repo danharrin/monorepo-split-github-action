@@ -48,7 +48,7 @@ git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
 echo "Pushing git commit"
 
 # --set-upstream: sets de branch when pushing to a branch that does not exist
-git push origin --set-upstream "$TARGET_BRANCH"
+git push origin --set-upstream master
 
 # push tag if present
 if [ ! -d "$TAG" ]
