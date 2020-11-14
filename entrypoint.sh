@@ -12,7 +12,7 @@ function note()
 
     printf "\n";
     # \e[33m makes it yellow (see https://misc.flogisoft.com/bash/tip_colors_and_formatting)
-    echo '\e[33m[NOTE] ' . $MESSAGE;
+    echo "\e[33m[NOTE] $MESSAGE";
     printf "\n";
 }
 
