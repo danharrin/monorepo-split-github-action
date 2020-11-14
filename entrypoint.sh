@@ -8,8 +8,8 @@ set -u
 
 echo "Starts"
 PACKAGE_DIRECTORY="$1"
-DESTINATION_GITHUB_USERNAME="$2"
-DESTINATION_REPOSITORY_NAME="$3"
+SPLIT_REPOSITORY_ORGANIZATION="$2"
+SPLIT_REPOSITORY_NAME="$3"
 USER_EMAIL="$4"
 COMMIT_MESSAGE="$5"
 
@@ -19,8 +19,8 @@ echo "Cloning destination git repository"
 
 # Setup git
 git config --global user.email "$USER_EMAIL"
-git config --global user.name "$DESTINATION_GITHUB_USERNAME"
-git clone -- "https://$API_TOKEN_GITHUB@github.com/$DESTINATION_GITHUB_USERNAME/$DESTINATION_REPOSITORY_NAME.git" "$CLONE_DIR"
+git config --global user.name "$SPLIT_REPOSITORY_ORGANIZATION"
+git clone -- "https://$API_TOKEN_GITHUB@github.com/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git" "$CLONE_DIR"
 ls -la "$CLONE_DIR"
 
 echo "Cleaning destination repository of old files"
