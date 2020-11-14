@@ -5,4 +5,5 @@ Based heavily on [cpina/github-action-push-to-another-repository](https://github
 ## Example
 
 - See [`.github/workflows/self_test.yaml`](.github/workflows/self_test.yaml) for basic workflow configuration
+- See [`.github/workflows/self_test_with_tag.yaml`](.github/workflows/self_test_with_tag.yaml) for split with tags
 - Check [TomasVotruba/github-action-monorepo-split-test](https://github.com/TomasVotruba/github-action-monorepo-split-test) for split repository
