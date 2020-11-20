@@ -20,7 +20,7 @@ inputs:
         default: 'Package split ORIGIN_COMMIT'
         required: false
     tag:
-        description: '[Optional] Tag to be releasd'
+        description: '[Optional] Tag to be released'
         required: false
 
 runs:
