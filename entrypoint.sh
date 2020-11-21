@@ -20,18 +20,27 @@ note "Starts"
 PACKAGE_DIRECTORY="$1"
 SPLIT_REPOSITORY_ORGANIZATION="$2"
 SPLIT_REPOSITORY_NAME="$3"
-USER_EMAIL="$4"
-COMMIT_MESSAGE="$5"
-TAG="$6"
+COMMIT_MESSAGE="$4"
+TAG="$5"
+USER_EMAIL="$6"
+USER_NAME="$7"
+
+# setup git
+if test ! -z "$USER_EMAIL"
+then
+    git config --global user.email "$USER_EMAIL"
+fi
+
+if test ! -z "$USER_NAME"
+then
+    git config --global user.name "$USER_NAME"
+fi
 
 CLONE_DIR=$(mktemp -d)
-
 CLONED_REPOSITORY="https://github.com/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git"
 note "Cloning '$CLONED_REPOSITORY' repository "
 
-# Setup git
-git config --global user.email "$USER_EMAIL"
-git config --global user.name "$SPLIT_REPOSITORY_ORGANIZATION"
+# clone repository
 git clone -- "https://$GITHUB_TOKEN@github.com/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git" "$CLONE_DIR"
 ls -la "$CLONE_DIR"
 
