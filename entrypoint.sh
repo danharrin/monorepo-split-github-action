@@ -84,6 +84,6 @@ then
     if test -z "$TAG_EXISTS_IN_REMOTE"
     then
         git tag $TAG -m "Publishing tag ${TAG}"
-        git push --quiet origin "${TAG}" --tags
+        git push --quiet origin "${TAG}"
     fi
 fi
