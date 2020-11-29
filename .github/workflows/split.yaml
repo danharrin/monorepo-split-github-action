@@ -15,7 +15,7 @@ jobs:
 
             -
                 # Uses an action in the root directory
-                uses: "./.."
+                uses: "./"
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
