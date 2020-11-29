@@ -38,9 +38,9 @@ jobs:
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
-                    package-directory: 'package/split-me'
+                    package-directory: 'packages/easy-coding-standard'
                     split-repository-organization: 'symplify'
-                    split-repository-name: 'monorepo-split-github-action-test'
+                    split-repository-name: 'easy-coding-standard'
                     tag: ${{ steps.previous_tag.outputs.tag }}
                     # change to use that should be signed under the split commit 
                     user-name: "kaizen-ci"
