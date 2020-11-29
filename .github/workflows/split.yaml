@@ -20,7 +20,7 @@ jobs:
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
-                    package-directory: 'tests/package/some-package'
+                    package-directory: 'tests/packages/some-package'
                     split-repository-organization: 'symplify'
                     split-repository-name: 'monorepo-split-github-action-test'
                     # change to use that should be signed under the split commit
