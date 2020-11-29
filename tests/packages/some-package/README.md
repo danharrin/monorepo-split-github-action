@@ -1,3 +1,3 @@
-Some content
+# Some Epic Content
 
-New content with new tag
+This repository was split thanks to [symplify/monorepo-split-github-action](https://github.com/symplify/monorepo-split-github-action)!
