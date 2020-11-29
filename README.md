@@ -8,9 +8,12 @@ Based heavily on [cpina/github-action-push-to-another-repository](https://github
 ### Split Packages With Tag
 
 ```yaml
-name: 'Monorepo Split Test With Tag'
+name: 'Monorepo Split With Tag'
 
-on: [push]
+on:
+    push:
+        branches:
+            - master
 
 jobs:
     monorepo_split_test_with_tag:
@@ -31,14 +34,15 @@ jobs:
 
             -
                 # Uses an action in the root directory
-                uses: ./packages/monorepo-split-github-action
+                uses: "symplify/monorepo-split-github-action@master"
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
-                    package-directory: 'packages/monorepo-split-github-action/tests/packages/some-package'
+                    package-directory: 'package/split-me'
                     split-repository-organization: 'symplify'
                     split-repository-name: 'monorepo-split-github-action-test'
                     tag: ${{ steps.previous_tag.outputs.tag }}
+                    # change to use that should be signed under the split commit 
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"
 ```

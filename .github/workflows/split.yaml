@@ -1,0 +1,7 @@
+name: Split
+
+on:
+    - pull_request
+    - push
+
+jobs:
