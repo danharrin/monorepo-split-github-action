@@ -25,6 +25,10 @@ inputs:
     user-name:
         description: '[Optional] Git User Name'
         required: false
+    branch:
+        description: 'Git branch'
+        default: 'master'
+        required: true
 
 runs:
     using: 'docker'
@@ -37,6 +41,7 @@ runs:
         - ${{ inputs.tag }}
         - ${{ inputs.user-email }}
         - ${{ inputs.user-name }}
+        - ${{ inputs.branch }}
 
 branding:
     icon: maximize-2
