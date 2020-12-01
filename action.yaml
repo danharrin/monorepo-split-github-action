@@ -20,11 +20,9 @@ inputs:
         description: '[Optional] Tag to be released'
         required: false
     user-email:
-        description: '[Optional] Git User Email'
-        required: false
+        description: 'Git User Email'
     user-name:
-        description: '[Optional] Git User Name'
-        required: false
+        description: 'Git User Name'
 
 runs:
     using: 'docker'
