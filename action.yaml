@@ -10,21 +10,24 @@ inputs:
         description: 'Remote organization'
         required: true
     split-repository-name:
-        description: 'Remove repository'
+        description: 'Remote repository'
         required: true
     commit-message:
-        description: '[Optional] commit message for the output repository. ORIGIN_COMMIT is replaced by the URL@commit in the origin repo'
-        default: 'Package split ORIGIN_COMMIT'
+        description: '[Optional] commit message for the output repository. ORIGIN_COMMIT is replaced by the URL@commit in the origin repo.'
         required: false
+    branch:
+        description: 'Git branch'
+        default: 'master'
+        required: true
     tag:
         description: '[Optional] Tag to be released'
         required: false
     user-email:
-        description: '[Optional] Git User Email'
-        required: false
+        description: 'Git User Email'
+        required: true
     user-name:
-        description: '[Optional] Git User Name'
-        required: false
+        description: 'Git User Name'
+        required: true
 
 runs:
     using: 'docker'
@@ -34,6 +37,7 @@ runs:
         - ${{ inputs.split-repository-organization }}
         - ${{ inputs.split-repository-name }}
         - ${{ inputs.commit-message }}
+        - ${{ inputs.branch }}
         - ${{ inputs.tag }}
         - ${{ inputs.user-email }}
         - ${{ inputs.user-name }}

@@ -21,9 +21,10 @@ PACKAGE_DIRECTORY="$1"
 SPLIT_REPOSITORY_ORGANIZATION="$2"
 SPLIT_REPOSITORY_NAME="$3"
 COMMIT_MESSAGE="$4"
-TAG="$5"
-USER_EMAIL="$6"
-USER_NAME="$7"
+BRANCH="$5"
+TAG="$6"
+USER_EMAIL="$7"
+USER_NAME="$8"
 
 # setup git
 if test ! -z "$USER_EMAIL"
@@ -50,16 +51,23 @@ note "Cleaning destination repository of old files"
 find "$CLONE_DIR" | grep -v "^$CLONE_DIR/\.git" | grep -v "^$CLONE_DIR$" | xargs rm -rf # delete all files (to handle deletions)
 ls -la "$CLONE_DIR"
 
+if test ! -z "$COMMIT_MESSAGE"
+then
+    ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+    COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
+else
+    COMMIT_MESSAGE=$(git show -s --format=%B "$GITHUB_SHA")
+fi
+
 note "Copying contents to git repo"
 
-cp -r "$PACKAGE_DIRECTORY"/* "$CLONE_DIR"
+# copy the package directory including all hidden files to the clone dir
+# make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
+cp -Ra $PACKAGE_DIRECTORY/. "$CLONE_DIR"
 cd "$CLONE_DIR"
 ls -la
 
 note "Adding git commit"
-
-ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
-COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
 
 git add .
 git status
@@ -70,7 +78,7 @@ git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
 note "Pushing git commit"
 
 # --set-upstream: sets the branch when pushing to a branch that does not exist
-git push --quiet origin master
+git push --quiet origin $BRANCH
 
 # push tag if present
 if test ! -z "$TAG"
