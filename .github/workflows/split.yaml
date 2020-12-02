@@ -14,13 +14,15 @@ jobs:
                 uses: actions/checkout@v2
 
             -
-                # Uses an action in the root directory
+                # run action.yaml in the root directory
+                # see https://github.community/t/self-reference-an-action-for-testing/17891
                 uses: "./"
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
-                    package-directory: 'tests/package/some-package'
+                    package-directory: 'tests/packages/some-package'
                     split-repository-organization: 'symplify'
                     split-repository-name: 'monorepo-split-github-action-test'
+                    # change to use that should be signed under the split commit
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"
