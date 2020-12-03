@@ -24,5 +24,5 @@ jobs:
                     split-repository-organization: 'symplify'
                     split-repository-name: 'monorepo-split-github-action-test'
                     # change to use that should be signed under the split commit
-                    user-name: "kaizen-ci"
-                    user-email: "info@kaizen-ci.org"
+                    user-name: 'kaizen-ci'
+                    user-email: 'info@kaizen-ci.org'
