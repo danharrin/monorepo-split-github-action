@@ -9,6 +9,9 @@ on:
         tags:
             - '*'
 
+        release:
+            types: [created]
+
 jobs:
     split_test:
         runs-on: ubuntu-latest
