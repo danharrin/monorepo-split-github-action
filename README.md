@@ -33,7 +33,7 @@ jobs:
                 uses: "WyriHaximus/github-action-get-previous-tag@master"
 
             -
-                uses: "symplify/monorepo-split-github-action@master"
+                uses: "symplify/monorepo-split-github-action@1"
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
