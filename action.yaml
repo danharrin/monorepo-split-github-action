@@ -17,7 +17,7 @@ inputs:
         required: false
     branch:
         description: 'Git branch'
-        default: 'master'
+        default: 'main'
         required: true
     tag:
         description: '[Optional] Tag to be released'

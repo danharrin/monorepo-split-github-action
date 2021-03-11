@@ -13,7 +13,7 @@ name: 'Monorepo Split With Tag'
 on:
     push:
         branches:
-            - master
+            - main
 
 jobs:
     monorepo_split_test_with_tag:
