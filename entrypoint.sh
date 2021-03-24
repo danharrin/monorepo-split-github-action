@@ -33,12 +33,12 @@ COMMIT_SHA=$GITHUB_SHA
 
 
 # setup access token so went push repository
-if test ! -z "$GITHUB_TOKEN"
+if test -n "${GITHUB_TOKEN-}"
 then
     PAT=$GITHUB_TOKEN
 fi
 
-if test ! -z "$GITLAB_TOKEN"
+if test -n "${GITLAB_TOKEN-}"
 then
     PAT=$GITLAB_TOKEN
 fi
