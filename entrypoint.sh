@@ -82,6 +82,10 @@ else
     COMMIT_MESSAGE=$(git show -s --format=%B "$COMMIT_SHA")
 fi
 
+
+note "Checkout to '$BRANCH' branch"
+git checkout $BRANCH
+
 note "Copying contents to git repo"
 
 # copy the package directory including all hidden files to the clone dir
