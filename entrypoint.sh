@@ -36,11 +36,13 @@ COMMIT_SHA=$GITHUB_SHA
 if test -n "${GITHUB_TOKEN-}"
 then
     PAT=$GITHUB_TOKEN
+    HOST_PREFIX=
 fi
 
 if test -n "${GITLAB_TOKEN-}"
 then
     PAT=$GITLAB_TOKEN
+    HOST_PREFIX="oauth2:"
 fi
 
 
@@ -61,7 +63,7 @@ CLONED_REPOSITORY="https://$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION
 note "Cloning '$CLONED_REPOSITORY' repository "
 
 # clone repository
-git clone -- "https://$PAT@$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git" "$CLONE_DIR"
+git clone -- "https://$HOST_PREFIX$PAT@$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git" "$CLONE_DIR"
 ls -la "$CLONE_DIR"
 
 note "Cleaning destination repository of old files"
