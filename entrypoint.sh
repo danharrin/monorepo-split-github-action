@@ -63,7 +63,7 @@ CLONED_REPOSITORY="https://$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION
 note "Cloning '$CLONED_REPOSITORY' repository "
 
 # clone repository
-git clone -- "https://$HOST_PREFIX$PAT@$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git" "$CLONE_DIR"
+git clone -- "https://$HOST_PREFIX$PAT@$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git" "$CLONE_DIR" -b $BRANCH
 ls -la "$CLONE_DIR"
 
 note "Cleaning destination repository of old files"
@@ -83,10 +83,7 @@ else
 fi
 
 
-note "Checkout to '$BRANCH' branch"
-git checkout $BRANCH
-
-note "Copying contents to git repo"
+note "Copying contents to git repo of '$BRANCH' branch"
 
 # copy the package directory including all hidden files to the clone dir
 # make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
