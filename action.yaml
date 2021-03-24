@@ -6,6 +6,10 @@ inputs:
     package-directory:
         description: 'Local package directory'
         required: true
+    split-repository-host:
+        description: 'Host'
+        default: 'github.com'
+        required: false
     split-repository-organization:
         description: 'Remote organization'
         required: true
@@ -41,6 +45,7 @@ runs:
         - ${{ inputs.tag }}
         - ${{ inputs.user-email }}
         - ${{ inputs.user-name }}
+        - ${{ inputs.split-repository-host }}
 
 branding:
     icon: maximize-2
