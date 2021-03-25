@@ -97,10 +97,6 @@ fi
 
 note "Copying contents to git repo of '$BRANCH' branch"
 
-# list root files
-ls -la
-
-
 # copy the package directory including all hidden files to the clone dir
 # make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
 cp -Ra $PACKAGE_DIRECTORY/. "$TARGET_DIR"
