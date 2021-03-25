@@ -32,8 +32,6 @@ TAG="$6"
 USER_EMAIL="$7"
 USER_NAME="$8"
 SPLIT_REPOSITORY_HOST="$9"
-GITHUB_SHA_BEFORE="${10}"
-GITHUB_SHA_AFTER="${11}"
 
 
 # @todo also for split from gitlab
@@ -114,7 +112,7 @@ git add .
 if git diff-index --quiet HEAD
 then
     # see https://docs.github.com/en/developers/webhooks-and-events/github-event-types#pushevent
-    RICH_COMMIT_MESSAGE=$(git log $GITHUB_SHA_BEFORE..$GITHUB_SHA_AFTER --reverse --pretty='%H %s' | sed -e 's/^/$FULL_GITHUB_REPOSITORY\/commit\//')
+    RICH_COMMIT_MESSAGE=$(git log $GITHUB_EVENT_BEFORE..$GITHUB_EVENT_AFTER --reverse --pretty='%H %s' | sed -e 's/^/$FULL_GITHUB_REPOSITORY\/commit\//')
     git commit --message "$COMMIT_MESSAGE" --message "$RICH_COMMIT_MESSAGE"
 
     note "Pushing git commit with '$COMMIT_MESSAGE' message"

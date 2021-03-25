@@ -46,8 +46,6 @@ runs:
         - ${{ inputs.user-email }}
         - ${{ inputs.user-name }}
         - ${{ inputs.split-repository-host }}
-        - ${{ github.event.before }}
-        - ${{ github.event.after }}
 
 branding:
     icon: maximize-2
