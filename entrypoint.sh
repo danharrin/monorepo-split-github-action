@@ -86,7 +86,7 @@ note "Copying contents to git repo of '$BRANCH' branch"
 cp -Ra $PACKAGE_DIRECTORY/. "$TARGET_DIR"
 
 note "Files that will be pushed"
-ls -la
+ls -la "$TARGET_DIR"
 
 cd "$TARGET_DIR"
 BRANCH=$BRANCH php ../src/commit_if_changed_files.php
