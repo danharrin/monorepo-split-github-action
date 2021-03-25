@@ -80,6 +80,14 @@ mv "$CLONE_DIR/.git" "$TARGET_DIR/.git"
 
 ls -la "$TARGET_DIR"
 
+if test ! -z "$COMMIT_MESSAGE"
+then
+    ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$COMMIT_SHA"
+    COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
+else
+    COMMIT_MESSAGE=$(git show -s --format=%B "$COMMIT_SHA")
+fi
+
 
 note "Copying contents to git repo of '$BRANCH' branch"
 
@@ -95,13 +103,6 @@ ls -la
 note "Adding git commit"
 git add .
 
-if test ! -z "$COMMIT_MESSAGE"
-then
-    ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$COMMIT_SHA"
-    COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
-else
-    COMMIT_MESSAGE=$(git show -s --format=%B "$COMMIT_SHA")
-fi
 
 note "Pushing git commit with '$COMMIT_MESSAGE' message"
 # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
