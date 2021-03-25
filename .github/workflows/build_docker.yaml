@@ -1,0 +1,19 @@
+name: Build Docker
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build_docker:
+        runs-on: ubuntu-latest
+
+        steps:
+            -
+                uses: actions/checkout@v2
+
+            -   run: docker build .
+
+            # docker-build . --quiet returns the ID of build container, so we can run it immediately
+            -   run: docker run $(docker build . --quiet)
