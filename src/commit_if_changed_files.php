@@ -5,8 +5,6 @@ declare(strict_types=1);
 // setup GitHub envs to variables
 $envs = getenv();
 
-var_dump($envs);
-
 $commitSha = $envs['GITHUB_SHA'];
 $branch = $envs['BRANCH'];
 
