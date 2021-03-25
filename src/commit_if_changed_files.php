@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 
 // use like: php/commit_if_changed_files.php "<repository path to push>" "<commit sha-1>" "<branch>"
-$repositoryPathToPush = $argv[0];
-$currentCommitHash = $argv[1];
-$branch = $argv[2];
-
-echo 'repo: ';
-var_dump($repositoryPathToPush);
-echo 'commit hash: ';
-var_dump($currentCommitHash);
-echo 'branch: ';
-var_dump($branch);
+// $argv[0] is the file name itself
+$repositoryPathToPush = $argv[1];
+$currentCommitHash = $argv[2];
+$branch = $argv[1];
 
 
 // WARNING! this function happen before we change directory
