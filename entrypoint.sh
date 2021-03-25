@@ -91,7 +91,10 @@ note "Files that will be pushed"
 ls -la "$TARGET_DIR"
 
 # warning: this must happen in the main directory, where .git is present, so the sha can be found
-COMMIT_MESSAGE=$("php src/create_commit_message.php $GITHUB_SHA")
+COMMIT_MESSAGE=$(php -f src/create_commit_message.php $GITHUB_SHA)
+
+# debug
+echo $COMMIT_MESSAGE
 
 cd "$TARGET_DIR"
 php ../src/commit_if_changed_files.php $COMMIT_MESSAGE $BRANCH
