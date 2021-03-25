@@ -32,6 +32,8 @@ TAG="$6"
 USER_EMAIL="$7"
 USER_NAME="$8"
 SPLIT_REPOSITORY_HOST="$9"
+GITHUB_SHA_BEFORE="${10}"
+GITHUB_SHA_AFTER="${11}"
 
 
 # @todo also for split from gitlab
@@ -80,9 +82,12 @@ mv "$CLONE_DIR/.git" "$TARGET_DIR/.git"
 
 ls -la "$TARGET_DIR"
 
+
+FULL_GITHUB_REPOSITORY="https://github.com/$GITHUB_REPOSITORY"
+
 if test ! -z "$COMMIT_MESSAGE"
 then
-    ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$COMMIT_SHA"
+    ORIGIN_COMMIT="$FULL_GITHUB_REPOSITORY/commit/$COMMIT_SHA"
     COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
 else
     COMMIT_MESSAGE=$(git show -s --format=%B "$COMMIT_SHA")
@@ -104,13 +109,19 @@ note "Adding git commit"
 git add .
 
 
-note "Pushing git commit with '$COMMIT_MESSAGE' message"
+
 # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
-git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
+if git diff-index --quiet HEAD
+then
+    # see https://docs.github.com/en/developers/webhooks-and-events/github-event-types#pushevent
+    RICH_COMMIT_MESSAGE=$(git log $GITHUB_SHA_BEFORE..$GITHUB_SHA_AFTER --reverse --pretty='%H %s' | sed -e 's/^/$FULL_GITHUB_REPOSITORY\/commit\//')
+    git commit --message "$COMMIT_MESSAGE" --message "$RICH_COMMIT_MESSAGE"
 
-
-# --set-upstream: sets the branch when pushing to a branch that does not exist
-git push --quiet origin $BRANCH
+    note "Pushing git commit with '$COMMIT_MESSAGE' message"
+    git push --quiet origin $BRANCH
+else
+    note "Nothing to commit"
+fi
 
 
 # push tag if present
