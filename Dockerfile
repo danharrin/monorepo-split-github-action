@@ -9,6 +9,7 @@ COPY composer.* ./
 RUN composer install --prefer-dist --no-progress
 
 # make local content available inside docker
-COPY . .
+RUN chmod +x entrypoint.sh
+COPY ./ .
 
 ENTRYPOINT ["/entrypoint.sh"]
