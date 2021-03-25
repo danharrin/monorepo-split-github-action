@@ -113,7 +113,7 @@ ls -la
 
 
 # avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
-HAS_CHANGED_FILES=$(php src/has_changed_files.php)
+HAS_CHANGED_FILES=$(php ../src/has_changed_files.php)
 
 if $HAS_CHANGED_FILES -eq 1
 then
