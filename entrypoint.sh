@@ -115,7 +115,7 @@ git add .
 if git diff-index --quiet HEAD
 then
     # see https://docs.github.com/en/developers/webhooks-and-events/github-event-types#pushevent
-    RICH_COMMIT_MESSAGE=$(git log $GITHUB_EVENT_BEFORE..$GITHUB_SHA --reverse --pretty='%H %s' | sed -e 's/^/$FULL_GITHUB_REPOSITORY\/commit\//')
+    RICH_COMMIT_MESSAGE=$(git log $GITHUB_BASE_REF..$GITHUB_SHA --reverse --pretty='%H %s' | sed -e 's/^/$FULL_GITHUB_REPOSITORY\/commit\//')
     git commit --message "$COMMIT_MESSAGE" --message "$RICH_COMMIT_MESSAGE"
 
     note "Pushing git commit with '$COMMIT_MESSAGE' message"
