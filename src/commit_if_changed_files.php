@@ -2,7 +2,11 @@
 
 function createCommitMessage(string $commitSha): string
 {
+    $oldDirectory = getcwd();
+    chdir(__DIR__ . '/..');
     exec("git show -s --format=%B $commitSha", $output);
+    chdir($oldDirectory);
+
     return $output[0] ?? '';
 }
 
@@ -44,6 +48,7 @@ var_dump($hasChangedFiles);
 
     note('Pushing git commit with "' . $commitMessage . '" message');
     $branch = $envs['BRANCH'];
+
     exec('git push --quiet origin ' . $branch);
 //} else {
 //    note('No files to change');
