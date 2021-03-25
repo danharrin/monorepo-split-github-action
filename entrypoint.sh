@@ -114,9 +114,7 @@ git add .
 # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
 if git diff-index --quiet HEAD
 then
-    PREVIOUS_SHA=$(git rev-parse --verify HEAD)
-
-    git commit --message "$COMMIT_MESSAGE" --message "$RICH_COMMIT_MESSAGE"
+    git commit --message "$COMMIT_MESSAGE"
 
     note "Pushing git commit with '$COMMIT_MESSAGE' message"
     git push --quiet origin $BRANCH
