@@ -15,7 +15,7 @@ function createCommitMessage(string $commitSha): string
 }
 
 function note(string $message) {
-    echo '\033[0;33m' . $message . '\033[0m' . PHP_EOL;
+    echo "\033[0;33m" . $message . "\033[0m" . PHP_EOL;
 }
 
 $commitMessage = createCommitMessage($commitSha);
@@ -23,6 +23,8 @@ $commitMessage = createCommitMessage($commitSha);
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);
+
+var_dump($hasChangedFiles);
 
 // 1 = changed files
 // 0 = no changed files
