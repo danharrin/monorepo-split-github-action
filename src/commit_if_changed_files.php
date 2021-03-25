@@ -13,7 +13,7 @@ exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);
 if ($hasChangedFiles === 1) {
     echo 'Adding git commit' . PHP_EOL;
     exec('git add .');
-    exec('git commit --message "$COMMIT_MESSAGE"');
+    exec("git commit --message '$commitMessage'");
 
     echo "Pushing git commit with '$commitMessage' message" . PHP_EOL;
     exec('git push --quiet origin $branch');
