@@ -8,6 +8,9 @@ $envs = getenv();
 exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);
 $hasChangedFiles = (int) $hasChangedFiles;
 
+// debug
+var_dump($hasChangedFiles);
+
 // 1 = changed files
 // 0 = no changed files
 if ($hasChangedFiles === 1) {
