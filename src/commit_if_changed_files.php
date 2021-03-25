@@ -4,8 +4,11 @@
 $envs = getenv();
 
 
-exec('git add .');
-exec('git status');
+exec('git add .', $output);
+var_dump($output);
+
+exec('git status', $output);
+var_dump($output);
 
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
