@@ -1,0 +1,4 @@
+/vendor
+
+# this file is allowed on purpose, so Docker install if super fast
+# composer.lock
