@@ -1,5 +1,16 @@
 <?php
 
+function createCommitMessage(string $commitSha): string
+{
+    exec("git show -s --format=%B $commitSha", $output);
+    return $output[0] ?? '';
+}
+
+function note(string $message) {
+    echo PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
+}
+
+
 // setup GitHub envs to variables
 $envs = getenv();
 
@@ -36,17 +47,4 @@ if ($hasChangedFiles === 1) {
     exec('git push --quiet origin ' . $branch);
 } else {
     note('No files to change');
-}
-
-
-// functions
-
-function createCommitMessage(string $commitSha): string
-{
-    exec("git show -s --format=%B $commitSha", $output);
-    return $output[0] ?? '';
-}
-
-function note(string $message) {
-    echo PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
 }
