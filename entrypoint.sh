@@ -63,7 +63,7 @@ then
     git config --global user.name "$USER_NAME"
 fi
 
-CLONE_DIR=$(mktemp -d)
+CLONE_DIR='clone_directory'
 TARGET_DIR='build_directory'
 
 HOST_REPOSITORY_ORGANIZATIN_NAME=$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git
