@@ -39,7 +39,8 @@ var_dump($hasChangedFiles);
 if ($hasChangedFiles === 1) {
     note('Adding git commit');
 
-    note('Pushing git commit with "' . $commitMessage . '" message');
+    $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $branch);
+    note($message);
 
     exec("git commit --message '$commitMessage'");
     exec('git push --quiet origin ' . $branch);
@@ -59,8 +60,7 @@ chdir($formerWorkingDirectory);
 function createCommitMessage(string $commitSha): string
 {
     exec("git show -s --format=%B $commitSha", $output);
-    $bareMessage = $output[0] ?? '';
-    return $bareMessage . PHP_EOL;
+    return $output[0] ?? '';
 }
 
 
