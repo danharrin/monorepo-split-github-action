@@ -32,7 +32,7 @@ var_dump($hasChangedFiles);
 
 // 1 = changed files
 // 0 = no changed files
-if ($hasChangedFiles === 1) {
+//if ($hasChangedFiles === 1) {
     $commitSha = $envs['GITHUB_SHA'];
 
     note('Adding git commit');
@@ -45,6 +45,6 @@ if ($hasChangedFiles === 1) {
     note('Pushing git commit with "' . $commitMessage . '" message');
     $branch = $envs['BRANCH'];
     exec('git push --quiet origin ' . $branch);
-} else {
-    note('No files to change');
-}
+//} else {
+//    note('No files to change');
+//}
