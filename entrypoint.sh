@@ -1,18 +1,24 @@
 #!/bin/sh -l
 
+# show colors
+export TERM=xterm-color
+
 # if a command fails it stops the execution
 set -e
 
 # script fails if trying to access to an undefined variable
 set -u
 
+YELLOW='\033[0;33m'
+NO_COLOR='\033[0m'
+
 function note()
 {
     MESSAGE=$1;
 
-    printf "\n";
+    printf "\n${YELLOW}";
     echo "[NOTE] $MESSAGE";
-    printf "\n";
+    printf "\n${NO_COLOR}";
 }
 
 note "Starts"
