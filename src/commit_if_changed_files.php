@@ -8,6 +8,13 @@ $repositoryPathToPush = $argv[0];
 $currentCommitHash = $argv[1];
 $branch = $argv[2];
 
+echo 'repo: ';
+var_dump($repositoryPathToPush);
+echo 'commit hash: ';
+var_dump($currentCommitHash);
+echo 'branch: ';
+var_dump($branch);
+
 
 // WARNING! this function happen before we change directory
 // if we do this in split repository, the original hash is missing there and it will fail
