@@ -76,7 +76,7 @@ note "Cleaning destination repository of old files"
 
 # We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on.
 mv "$CLONE_DIR/.git" "$TARGET_DIR/.git"
-rm -rf $CLONE_DIR
+# rm -rf $CLONE_DIR
 
 ls -la "$TARGET_DIR"
 
