@@ -74,6 +74,7 @@ ls -la "$CLONE_DIR"
 note "Cleaning destination repository of old files"
 
 # We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on.
+mkdir "$TARGET_DIR"
 mv "$CLONE_DIR/.git" "$TARGET_DIR/.git"
 # cleanpu old unused data to avoid pushing them
 rm -rf $CLONE_DIR
