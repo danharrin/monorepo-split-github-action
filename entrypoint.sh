@@ -33,10 +33,6 @@ USER_NAME="$7"
 SPLIT_REPOSITORY_HOST="$8"
 
 
-# @todo also for split from gitlab
-COMMIT_SHA=$GITHUB_SHA
-
-
 # setup access token so went push repository
 
 if test -n "${GITHUB_TOKEN-}"

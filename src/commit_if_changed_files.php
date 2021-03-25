@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 // setup GitHub envs to variables
 $envs = getenv();
-$commitSha = $envs['COMMIT_SHA'];
+$commitSha = $envs['GITHUB_SHA'];
 $branch = $envs['BRANCH'];
 
 function createCommitMessage(string $commitSha): string
