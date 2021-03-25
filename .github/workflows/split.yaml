@@ -9,8 +9,8 @@ on:
         tags:
             - '*'
 
-        release:
-            types: [created]
+    release:
+        types: [created]
 
 jobs:
     split_test:
@@ -18,26 +18,17 @@ jobs:
 
         steps:
             -
-                # debug
-                run: echo ${{ github.event_name }}
-
-            -
-                # debug
-                run: echo ${{ github.event.action }}
-
-            -
                 uses: actions/checkout@v2
 
             -
                 # run action.yaml in the root directory
                 # see https://github.community/t/self-reference-an-action-for-testing/17891
                 uses: "./"
-                env:
-                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
                     package-directory: 'tests/packages/some-package'
                     split-repository-organization: 'symplify'
                     split-repository-name: 'monorepo-split-github-action-test'
+
                     # change to use that should be signed under the split commit
                     user-name: 'kaizen-ci'
                     user-email: 'info@kaizen-ci.org'

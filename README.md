@@ -8,7 +8,7 @@ Based heavily on [cpina/github-action-push-to-another-repository](https://github
 ### Split Packages With Tag
 
 ```yaml
-name: 'Monorepo Split With Tag'
+name: 'Packages Split'
 
 on:
     push:
@@ -18,7 +18,7 @@ on:
             - '*'
 
 jobs:
-    monorepo_split_test_with_tag:
+    packages_split:
         runs-on: ubuntu-latest
 
         steps:
@@ -29,10 +29,10 @@ jobs:
                 with:
                     fetch-depth: 0
 
+            # no tag
             -
+                if: "!startsWith(github.ref, 'refs/tags/')"
                 uses: "symplify/monorepo-split-github-action@1.1"
-                env:
-                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
                     # ↓ split "packages/easy-coding-standard" directory
                     package-directory: 'packages/easy-coding-standard'
@@ -41,7 +41,23 @@ jobs:
                     split-repository-organization: 'symplify'
                     split-repository-name: 'easy-coding-standard'
 
+                    # ↓ the user signed under the split commit
+                    user-name: "kaizen-ci"
+                    user-email: "info@kaizen-ci.org"
+
+            # with tag
+            -
+                if: "!startsWith(github.ref, 'refs/tags/')"
+                uses: "symplify/monorepo-split-github-action@1.1"
+                with:
                     tag: ${GITHUB_REF#refs/tags/}
+
+                    # ↓ split "packages/easy-coding-standard" directory
+                    package-directory: 'packages/easy-coding-standard'
+
+                    # ↓ into https://github.com/symplify/easy-coding-standard repository
+                    split-repository-organization: 'symplify'
+                    split-repository-name: 'easy-coding-standard'
 
                     # ↓ the user signed under the split commit
                     user-name: "kaizen-ci"
