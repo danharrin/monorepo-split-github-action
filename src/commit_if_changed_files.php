@@ -4,6 +4,10 @@
 $envs = getenv();
 
 
+exec('git add .');
+exec('git status');
+
+
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);
 $hasChangedFiles = (int) $hasChangedFiles;
@@ -20,7 +24,6 @@ if ($hasChangedFiles === 1) {
 
     $commitMessage = createCommitMessage($commitSha);
 
-    exec('git add .');
     exec("git commit --message '$commitMessage'");
 
     note('Pushing git commit with "' . $commitMessage . '" message');
