@@ -11,6 +11,5 @@ RUN composer install --prefer-dist --no-progress
 # make local content available inside docker
 COPY entrypoint.sh entrypoint.sh
 COPY src ./
-COPY vendor ./
 
 ENTRYPOINT ["/entrypoint.sh"]
