@@ -106,16 +106,15 @@ note "Files that will be pushed"
 cd "$TARGET_DIR"
 ls -la
 
-note "Adding git commit"
-git add .
-
-
 # avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 git diff-index --quiet HEAD
 
 # see https://gist.github.com/tamsanh/783a62adeba81ba47999
 if [ $? -ne 0 ]
 then
+    note "Adding git commit"
+    git add .
+
     git commit --message "$COMMIT_MESSAGE"
 
     note "Pushing git commit with '$COMMIT_MESSAGE' message"
