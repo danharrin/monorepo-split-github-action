@@ -14,6 +14,8 @@ on:
     push:
         branches:
             - main
+        tags:
+            - '*'
 
 jobs:
     monorepo_split_test_with_tag:
@@ -27,11 +29,6 @@ jobs:
                 with:
                     fetch-depth: 0
 
-            # see https://github.com/WyriHaximus/github-action-get-previous-tag
-            -
-                id: previous_tag
-                uses: "WyriHaximus/github-action-get-previous-tag@master"
-
             -
                 uses: "symplify/monorepo-split-github-action@1.1"
                 env:
@@ -44,7 +41,7 @@ jobs:
                     split-repository-organization: 'symplify'
                     split-repository-name: 'easy-coding-standard'
 
-                    tag: ${{ steps.previous_tag.outputs.tag }}
+                    tag: ${GITHUB_REF#refs/tags/}
 
                     # ↓ the user signed under the split commit
                     user-name: "kaizen-ci"
