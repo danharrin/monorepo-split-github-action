@@ -114,7 +114,7 @@ git add .
 # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
 if git diff-index --quiet HEAD
 then
-    PREVIOUS_SHA=git rev-parse --verify HEAD
+    PREVIOUS_SHA=$(git rev-parse --verify HEAD)
 
     # see https://docs.github.com/en/developers/webhooks-and-events/github-event-types#pushevent
     RICH_COMMIT_MESSAGE=$(git log $PREVIOUS_SHA..$GITHUB_SHA --reverse --pretty='%H %s' | sed -e 's/^/$FULL_GITHUB_REPOSITORY\/commit\//')
