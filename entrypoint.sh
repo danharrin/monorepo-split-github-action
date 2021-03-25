@@ -110,9 +110,11 @@ note "Adding git commit"
 git add .
 
 
+# avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
+git diff-index --quiet HEAD
 
-# git diff-index : to avoid doing the git commit failing if there are no changes to be commit
-if git diff-index --quiet HEAD
+# see https://gist.github.com/tamsanh/783a62adeba81ba47999
+if [ $? -ne 0 ]
 then
     git commit --message "$COMMIT_MESSAGE"
 
