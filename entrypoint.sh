@@ -107,7 +107,7 @@ cd "$TARGET_DIR"
 ls -la
 
 note "Adding git commit"
-    git add .
+git add .
 
 # avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
