@@ -16,9 +16,6 @@ inputs:
     split-repository-name:
         description: 'Remote repository'
         required: true
-    commit-message:
-        description: '[Optional] commit message for the output repository. ORIGIN_COMMIT is replaced by the URL@commit in the origin repo.'
-        required: false
     branch:
         description: 'Git branch'
         default: 'main'
@@ -40,7 +37,6 @@ runs:
         - ${{ inputs.package-directory }}
         - ${{ inputs.split-repository-organization }}
         - ${{ inputs.split-repository-name }}
-        - ${{ inputs.commit-message }}
         - ${{ inputs.branch }}
         - ${{ inputs.tag }}
         - ${{ inputs.user-email }}

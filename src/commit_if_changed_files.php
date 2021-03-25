@@ -2,10 +2,19 @@
 
 declare(strict_types=1);
 
+// setup GitHub envs to variables
 $envs = getenv();
+$commitSha = $envs['COMMIT_SHA'];
+//$branch = $envs['BRANCH'];
 
-$commitMessage = $envs['COMMIT_MESSAGE'];
-$branch = $envs['BRANCH'];
+function createCommitMessage(string $commitSha): string
+{
+    exec("git show -s --format=%B $commitSha", $output);
+    return $output[0] ?? '';
+}
+
+$commitMessage = createCommitMessage($commitSha);
+
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);

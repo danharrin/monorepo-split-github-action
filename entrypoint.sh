@@ -26,12 +26,11 @@ note "Starts"
 PACKAGE_DIRECTORY="$1"
 SPLIT_REPOSITORY_ORGANIZATION="$2"
 SPLIT_REPOSITORY_NAME="$3"
-COMMIT_MESSAGE="$4"
-BRANCH="$5"
-TAG="$6"
-USER_EMAIL="$7"
-USER_NAME="$8"
-SPLIT_REPOSITORY_HOST="$9"
+BRANCH="$4"
+TAG="$5"
+USER_EMAIL="$6"
+USER_NAME="$7"
+SPLIT_REPOSITORY_HOST="$8"
 
 
 # @todo also for split from gitlab
@@ -67,13 +66,13 @@ fi
 CLONE_DIR='clone_directory'
 TARGET_DIR='build_directory'
 
-HOST_REPOSITORY_ORGANIZATIN_NAME=$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git
+HOST_REPOSITORY_ORGANIZATION_NAME=$SPLIT_REPOSITORY_HOST/$SPLIT_REPOSITORY_ORGANIZATION/$SPLIT_REPOSITORY_NAME.git
 
-CLONED_REPOSITORY="https://$HOST_REPOSITORY_ORGANIZATIN_NAME"
+CLONED_REPOSITORY="https://$HOST_REPOSITORY_ORGANIZATION_NAME"
 note "Cloning '$CLONED_REPOSITORY' repository "
 
 # clone repository
-git clone -- "https://$HOST_PREFIX$PAT@$HOST_REPOSITORY_ORGANIZATIN_NAME" "$CLONE_DIR"
+git clone -- "https://$HOST_PREFIX$PAT@$HOST_REPOSITORY_ORGANIZATION_NAME" "$CLONE_DIR"
 ls -la "$CLONE_DIR"
 
 note "Cleaning destination repository of old files"
@@ -85,17 +84,6 @@ cp -r "$CLONE_DIR/.git" "$TARGET_DIR/.git"
 ls -la "$TARGET_DIR"
 
 
-FULL_GITHUB_REPOSITORY="https://github.com/$GITHUB_REPOSITORY"
-
-if test ! -z "$COMMIT_MESSAGE"
-then
-    ORIGIN_COMMIT="$FULL_GITHUB_REPOSITORY/commit/$COMMIT_SHA"
-    COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
-else
-    COMMIT_MESSAGE=$(git show -s --format=%B "$COMMIT_SHA")
-fi
-
-
 note "Copying contents to git repo of '$BRANCH' branch"
 
 # copy the package directory including all hidden files to the clone dir
@@ -103,14 +91,9 @@ note "Copying contents to git repo of '$BRANCH' branch"
 cp -Ra $PACKAGE_DIRECTORY/. "$TARGET_DIR"
 
 note "Files that will be pushed"
-
-
 ls -la
 
 cd "$TARGET_DIR"
-ls -la
-
-
 php ../src/commit_if_changed_files.php
 
 
