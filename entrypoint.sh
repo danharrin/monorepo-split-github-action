@@ -103,6 +103,9 @@ cp -Ra $PACKAGE_DIRECTORY/. "$TARGET_DIR"
 
 note "Files that will be pushed"
 
+
+ls -la
+
 cd "$TARGET_DIR"
 ls -la
 
