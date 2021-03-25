@@ -2,6 +2,8 @@
 
 function createCommitMessage(string $commitSha): string
 {
+    return 'temporary message';
+
     exec("git show -s --format=%B $commitSha", $output);
     return $output[0] ?? '';
 }
@@ -26,7 +28,6 @@ echo $outputContent . PHP_EOL;
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);
-$hasChangedFiles = (int) $hasChangedFiles;
 
 // debug
 var_dump($hasChangedFiles);
