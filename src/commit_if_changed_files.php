@@ -6,6 +6,7 @@ $envs = getenv();
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);
+$hasChangedFiles = (int) $hasChangedFiles;
 
 // 1 = changed files
 // 0 = no changed files
