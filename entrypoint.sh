@@ -1,5 +1,7 @@
 #!/bin/sh -l
 
+php --version
+
 # show colors
 export TERM=xterm-color
 
