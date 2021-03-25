@@ -79,7 +79,6 @@ cp -r "$CLONE_DIR/.git" "$TARGET_DIR/.git"
 
 ls -la "$TARGET_DIR"
 
-
 note "Copying contents to git repo of '$BRANCH' branch"
 
 # copy the package directory including all hidden files to the clone dir
