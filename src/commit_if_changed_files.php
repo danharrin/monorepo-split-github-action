@@ -39,8 +39,6 @@ var_dump($hasChangedFiles);
     exec("git commit --message '$commitMessage'");
 
     note('Pushing git commit with "' . $commitMessage . '" message');
-    $branch = $envs['BRANCH'];
-
     exec('git push --quiet origin ' . $branch);
 //} else {
 //    note('No files to change');
