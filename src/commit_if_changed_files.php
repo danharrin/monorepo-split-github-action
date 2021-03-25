@@ -2,8 +2,6 @@
 
 function createCommitMessage(string $commitSha): string
 {
-    return 'temporary message';
-
     exec("git show -s --format=%B $commitSha", $output);
     return $output[0] ?? '';
 }
@@ -38,6 +36,7 @@ if ($hasChangedFiles === 1) {
     $commitSha = $envs['GITHUB_SHA'];
 
     note('Adding git commit');
+    note('Current commit sha: ' . $commitSha);
 
     $commitMessage = createCommitMessage($commitSha);
 
