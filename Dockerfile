@@ -6,6 +6,4 @@ RUN apk add --no-cache git
 COPY entrypoint.sh /entrypoint.sh
 COPY src src
 
-RUN chmod 777 "/entrypoint.sh"
-
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
