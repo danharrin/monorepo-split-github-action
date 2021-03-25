@@ -90,8 +90,7 @@ note "Files that will be pushed"
 ls -la
 
 cd "$TARGET_DIR"
-php ../src/commit_if_changed_files.php
-
+BRANCH=$BRANCH php ../src/commit_if_changed_files.php
 
 # push tag if present
 if test ! -z "$TAG"
