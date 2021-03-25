@@ -90,7 +90,7 @@ cp -Ra $PACKAGE_DIRECTORY/. "$TARGET_DIR"
 note "Files that will be pushed"
 ls -la "$TARGET_DIR"
 
-php src/commit_if_changed_files.php $TARGET_DIR $BRANCH $GITHUB_SHA
+php src/commit_if_changed_files.php $TARGET_DIR $GITHUB_SHA $BRANCH
 
 
 # push tag if present
