@@ -103,26 +103,11 @@ cp -Ra $PACKAGE_DIRECTORY/. "$TARGET_DIR"
 
 note "Files that will be pushed"
 
-
 cd "$TARGET_DIR"
 ls -la
 
 
-# avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
-HAS_CHANGED_FILES=$(php ../src/has_changed_files.php)
-
-if $HAS_CHANGED_FILES -eq 1
-then
-    note "Adding git commit"
-    git add .
-
-    git commit --message "$COMMIT_MESSAGE"
-    note "Pushing git commit with '$COMMIT_MESSAGE' message"
-    git push --quiet origin $BRANCH
-else
-    note 'No files to change'
-fi
-
+php ../src/commit_if_changed_files.php
 
 
 # push tag if present
