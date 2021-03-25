@@ -91,7 +91,7 @@ note "Files that will be pushed"
 ls -la "$TARGET_DIR"
 
 cd "$TARGET_DIR"
-BRANCH=$BRANCH php ../src/commit_if_changed_files.php
+BRANCH=$BRANCH GITHUB_SHA=$GITHUB_SHA php ../src/commit_if_changed_files.php
 
 # push tag if present
 if test ! -z "$TAG"
