@@ -1,23 +1,17 @@
 <?php
 
-function createCommitMessage(string $commitSha): string
-{
-    $oldDirectory = getcwd();
-    chdir(__DIR__ . '/..');
-    exec("git show -s --format=%B $commitSha", $output);
-    chdir($oldDirectory);
+declare(strict_types=1);
 
-    return $output[0] ?? '';
-}
+// use like: php/commit_if_changed_files.php "<commit message>" "<branch>"
+$commitMessage = $argv[0];
+$branch = $argv[1];
 
 function note(string $message) {
     echo PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
 }
 
-
 // setup GitHub envs to variables
 $envs = getenv();
-
 
 exec('git add .', $output);
 $outputContent = implode(PHP_EOL, $output);
@@ -41,8 +35,6 @@ var_dump($hasChangedFiles);
 
     note('Adding git commit');
     note('Current commit sha: ' . $commitSha);
-
-    $commitMessage = createCommitMessage($commitSha);
 
     exec("git commit --message '$commitMessage'");
 

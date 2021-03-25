@@ -90,8 +90,11 @@ cp -Ra $PACKAGE_DIRECTORY/. "$TARGET_DIR"
 note "Files that will be pushed"
 ls -la "$TARGET_DIR"
 
+# warning: this must happen in the main directory, where .git is present, so the sha can be found
+COMMIT_MESSAGE=$(src/create_commit_message.php)
+
 cd "$TARGET_DIR"
-BRANCH=$BRANCH GITHUB_SHA=$GITHUB_SHA php ../src/commit_if_changed_files.php
+php ../src/commit_if_changed_files.php $COMMIT_MESSAGE $BRANCH
 
 # push tag if present
 if test ! -z "$TAG"
