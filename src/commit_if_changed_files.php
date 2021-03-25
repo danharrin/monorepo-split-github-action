@@ -7,7 +7,7 @@ declare(strict_types=1);
 // $argv[0] is the file name itself
 $repositoryPathToPush = $argv[1];
 $currentCommitHash = $argv[2];
-$branch = $argv[1];
+$branch = $argv[3];
 
 
 // WARNING! this function happen before we change directory
