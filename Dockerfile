@@ -7,6 +7,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
 
 COPY . /app
+COPY entrypoint.sh /entrypoint.sh
 WORKDIR /app
 
 #COPY composer.* ./
@@ -17,4 +18,4 @@ RUN composer install --prefer-dist --no-progress
 #COPY entrypoint.sh /entrypoint.sh
 #COPY vendor vendor
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
