@@ -1,0 +1,17 @@
+name: Local Build Docker Image
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    local_build_docker_image:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Check out the repo
+                uses: actions/checkout@v2
+
+            # docker-build . --quiet returns the ID of build container, so we can run it immediately
+            -   name: Test Docker image
+                run: docker run $(docker build . --quiet)
