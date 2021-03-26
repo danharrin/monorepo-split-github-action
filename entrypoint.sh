@@ -22,7 +22,10 @@ function note()
 }
 
 
-if [ $# -eq 8 ]
+# arg number
+echo $#
+
+if [ $# -eq 0 ]
 then
     note "No arguments supplied. 8 required"
     exit 0
