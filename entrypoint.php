@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 if ($argc <= 8) {
-    note('Not enough arguments supplied. Exactly 8 required');
+    note(sprintf('Not enough arguments supplied. Exactly 8 required, but only %d given', $argc - 1));
     exit(0);
 } else {
     note('Starting...');
