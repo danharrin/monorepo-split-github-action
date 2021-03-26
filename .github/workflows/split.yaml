@@ -9,6 +9,8 @@ on:
         tags:
             - '*'
 
+    pull_request: null
+
     release:
         types: [created]
 
