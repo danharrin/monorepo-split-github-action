@@ -48,7 +48,11 @@ exec('git clone -- https://' . $publicAccessTokens . '@' . $hostRepositoryOrgani
 note('Cleaning destination repository of old files');
 // We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
 mkdir($buildDirectory . '/.git', 0777, true);
-copy($cloneDirectory . '/.git', $buildDirectory . '/.git');
+exec(sprintf('cp -Ra %s %s', $cloneDirectory . '/.git', $buildDirectory . '/.git'), $output, $exitCode);
+
+if ($exitCode === 1) {
+    die('Command failed');
+}
 
 
 // cleanup old unused data to avoid pushing them
