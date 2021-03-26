@@ -5,7 +5,7 @@ Based heavily on [cpina/github-action-push-to-another-repository](https://github
 ## Example
 
 
-### Split Packages With Tag
+### Split Packages Without and With Tag
 
 ```yaml
 name: 'Packages Split'
