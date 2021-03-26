@@ -5,7 +5,11 @@
 # show colors
 export TERM=xterm-color
 
+# show errors
+set -x
+
 # if a command fails it stops the execution
+
 set -e
 
 # script fails if trying to access to an undefined variable

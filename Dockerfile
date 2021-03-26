@@ -6,7 +6,7 @@ RUN apt-get install git -y
 # directory inside docker
 WORKDIR /project
 
-# make local content available inside docker
+# make local content available inside docker - copies to /project
 COPY . .
 
 # see https://nickjanetakis.com/blog/docker-tip-86-always-make-your-entrypoint-scripts-executable
