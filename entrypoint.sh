@@ -23,9 +23,7 @@ function note()
 
 
 # arg number
-echo "$#"
-
-if [ "$#" -ne 8 ]
+if [ -z ${1+x} ];
 then
     note "No arguments supplied. 8 required"
     exit 0
