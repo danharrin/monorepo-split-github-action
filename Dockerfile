@@ -1,6 +1,7 @@
-FROM php:8.0-fpm-alpine
+FROM php:8.0-fpm
 
-RUN apk add --no-cache git
+RUN apt-get update -y
+RUN apt-get install git -y
 
 # directory inside docker
 WORKDIR /project
