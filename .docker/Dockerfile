@@ -1,9 +1,13 @@
-FROM docker.pkg.github.com/symplify/monorepo-split-github-action/splitter
+# THIS IS BASE IMAGE
+FROM php:8.0-cli
+
+RUN apt-get update -y
+RUN apt-get install git -y
 
 # directory inside docker
-WORKDIR /project
+WORKDIR /splitter
 
-# make local content available inside docker - copies to /project
+# make local content available inside docker - copies to /splitter
 COPY . .
 
 # see https://nickjanetakis.com/blog/docker-tip-86-always-make-your-entrypoint-scripts-executable
