@@ -2,98 +2,66 @@
 
 declare(strict_types=1);
 
-if ($argc < 8) {
-    note("Not enough arguments supplied. 8 required");
+if ($argc <= 8) {
+    note('Not enough arguments supplied. Exactly 8 required');
     exit(0);
+} else {
+    note('Starting...');
 }
 
-note('Starts');
-
-// set parameter from command line
-$PACKAGE_DIRECTORY = $argv[1];
-$SPLIT_REPOSITORY_ORGANIZATION = $argv[2];
-$SPLIT_REPOSITORY_NAME = $argv[3];
-$BRANCH = $argv[4];
-$TAG = $argv[5];
-$USER_EMAIL = $argv[6];
-$USER_NAME = $argv[7];
-$SPLIT_REPOSITORY_HOST = $argv[8];
+// set variables from command line arguments
+$packageDirectory = $argv[1];
+$splitRepositoryOrganization = $argv[2];
+$splitRepositoryName = $argv[3];
+$branch = $argv[4];
+$tag = $argv[5];
+$userEmail = $argv[6];
+$userName = $argv[7];
+$splitRepositoryHost = $argv[8];
 
 
-# setup access token so went push repository
-
-// public access token
-$pat = null;
-$hostPrefix = null;
-if (getenv('GITHUB_TOKEN')) {
-    $pat = getenv('GITHUB_TOKEN');
-} elseif (getenv('GITLAB_TOKEN')) {
-    $pat = getenv('GITLAB_TOKEN');
-    $hostPrefix = 'oauth2:';
-}
-
+// setup access token to push repository (GitHub or Gitlab supported)
+$publicAccessTokens = resolvePublicAccessToken();
 
 
 // setup git user + email
-if (getenv('USER_EMAIL')) {
-    $userEmail = getenv('USER_EMAIL');
+if ($userName) {
+    exec('git config --global user.name ' . $userName);
+}
+
+if ($userEmail) {
     exec('git config --global user.email ' . $userEmail);
 }
 
-if (getenv('USER_NAME')) {
-    $userEmail = getenv('USER_NAME');
-    exec('git config --global user.name ' . $userEmail);
-}
 
+$cloneDirectory = 'clone_directory';
+$buildDirectory = 'build_directory';
 
-$CLONE_DIR='clone_directory';
-$TARGET_DIR='build_directory';
+$hostRepositoryOrganizationName = $splitRepositoryHost. '/' . $splitRepositoryOrganization . '/' . $splitRepositoryName . '.git';
 
-$HOST_REPOSITORY_ORGANIZATION_NAME=$SPLIT_REPOSITORY_HOST. '/' . $SPLIT_REPOSITORY_ORGANIZATION . '/' . $SPLIT_REPOSITORY_NAME . '.git';
+// info
+$clonedRepository='https://' . $hostRepositoryOrganizationName;
+note(sprintf('Cloning "%s" repository to "%d" directory', $clonedRepository, $cloneDirectory));
+exec('git clone -- https://' . $publicAccessTokens . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory);
 
-$CLONED_REPOSITORY='https://' . $HOST_REPOSITORY_ORGANIZATION_NAME;
-note("Cloning '$CLONED_REPOSITORY' repository");
-
-# clone repository
-exec('git clone -- https://' . $hostPrefix . $pat . '@' . $HOST_REPOSITORY_ORGANIZATION_NAME . ' ' . $CLONE_DIR;
-
-// debug
-// ls -la "$CLONE_DIR"
 
 note('Cleaning destination repository of old files');
+// We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
+mkdir($buildDirectory . '/.git', 0777, true);
+copy($cloneDirectory . '/.git', $buildDirectory . '/.git');
 
-# We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on.
-mkdir($TARGET_DIR . '/.git');
-copy($CLONE_DIR . '/.git', $TARGET_DIR . '/.git');
 
-//mkdir "$TARGET_DIR"
-//mv "$CLONE_DIR/.git" "$TARGET_DIR/.git"
+// cleanup old unused data to avoid pushing them
+exec('rm -rf ' . $cloneDirectory);
 
-# cleanpu old unused data to avoid pushing them
-rmdir($CLONE_DIR);
-//rm -rf $CLONE_DIR
 
+// copy the package directory including all hidden files to the clone dir
+// make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
+note("Copying contents to git repo of '$branch' branch");
+exec(sprintf('cp -Ra %s %s', $packageDirectory . '/.', $buildDirectory));
+
+note("Files that will be pushed");
 //ls -la "$TARGET_DIR"
-
-note ("Copying contents to git repo of '$BRANCH' branch");
-
-# copy the package directory including all hidden files to the clone dir
-# make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
-
-
-copy($PACKAGE_DIRECTORY . '/.', $TARGET_DIR);
-// cp -Ra $PACKAGE_DIRECTORY/. "$TARGET_DIR"
-
-note ("Files that will be pushed");
-//ls -la "$TARGET_DIR"
-
-php src/commit_if_changed_files.php $TARGET_DIR $GITHUB_SHA $BRANCH
-
-
-
-
-declare(strict_types=1);
-
 
 // use like: php/commit_if_changed_files.php "<repository path to push>" "<commit sha-1>" "<branch>"
 // $argv[0] is the file name itself
@@ -120,8 +88,10 @@ exec('git status', $output);
 $outputContent = implode(PHP_EOL, $output);
 echo $outputContent . PHP_EOL;
 
+
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);
+
 
 // 1 = changed files
 // 0 = no changed files
@@ -143,8 +113,7 @@ chdir($formerWorkingDirectory);
 
 
 // push tag if present
-if (getenv('TAG')) {
-    $tag = getenv('TAG');
+if ($tag) {
     $message = sprintf('Publishing "%s"', $tag);
     note($message);
 
@@ -159,7 +128,26 @@ function createCommitMessage(string $commitSha): string
     return $output[0] ?? '';
 }
 
+
 function note(string $message)
 {
     echo PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
+}
+
+
+function resolvePublicAccessToken(): string
+{
+    if (getenv('PAT')) {
+        return getenv('PAT');
+    }
+
+    if (getenv('GITHUB_TOKEN')) {
+        return getenv('GITHUB_TOKEN');
+    }
+
+    if (getenv('GITLAB_TOKEN')) {
+        return 'oauth2:' . getenv('GITLAB_TOKEN');
+    }
+
+    throw new RuntimeException('Public access token is missing, add it via: "PAT", "GITHUB_TOKEN" or "GITLAB_TOKEN" ');
 }

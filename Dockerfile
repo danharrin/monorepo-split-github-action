@@ -11,4 +11,4 @@ WORKDIR /splitter
 COPY . .
 
 # see https://nickjanetakis.com/blog/docker-tip-86-always-make-your-entrypoint-scripts-executable
-ENTRYPOINT ["/splitter/entrypoint.sh"]
+ENTRYPOINT ["php", "/splitter/entrypoint.php"]
