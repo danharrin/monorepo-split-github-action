@@ -23,9 +23,9 @@ function note()
 
 
 # arg number
-echo $#
+echo "$#"
 
-if [ $# -eq 0 ]
+if [ "$#" -ne 8 ]
 then
     note "No arguments supplied. 8 required"
     exit 0
