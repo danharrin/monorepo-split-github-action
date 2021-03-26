@@ -19,6 +19,8 @@ $userEmail = $argv[6];
 $userName = $argv[7];
 $splitRepositoryHost = $argv[8];
 
+$currentCommitHash = getenv('GITHUB_SHA');
+
 
 // setup access token to push repository (GitHub or Gitlab supported)
 $publicAccessTokens = resolvePublicAccessToken();
@@ -48,7 +50,7 @@ exec('git clone -- https://' . $publicAccessTokens . '@' . $hostRepositoryOrgani
 note('Cleaning destination repository of old files');
 // We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
 mkdir($buildDirectory . '/.git', 0777, true);
-exec(sprintf('cp -Ra %s %s', $cloneDirectory . '/.git', $buildDirectory . '/.git'), $output, $exitCode);
+exec(sprintf('cp -Ra %s %s', $cloneDirectory . '/.git', $buildDirectory . '/.git'), $outputLines, $exitCode);
 
 if ($exitCode === 1) {
     die('Command failed');
@@ -65,13 +67,7 @@ note("Copying contents to git repo of '$branch' branch");
 exec(sprintf('cp -Ra %s %s', $packageDirectory . '/.', $buildDirectory));
 
 note("Files that will be pushed");
-//ls -la "$TARGET_DIR"
-
-// use like: php/commit_if_changed_files.php "<repository path to push>" "<commit sha-1>" "<branch>"
-// $argv[0] is the file name itself
-$repositoryPathToPush = $argv[1];
-$currentCommitHash = $argv[2];
-$branch = $argv[3];
+list_directory_files($buildDirectory);
 
 
 // WARNING! this function happen before we change directory
@@ -80,21 +76,21 @@ $commitMessage = createCommitMessage($currentCommitHash);
 
 
 $formerWorkingDirectory = getcwd();
-chdir($repositoryPathToPush);
+chdir($buildDirectory);
 
 
-exec('git add .', $output);
-$outputContent = implode(PHP_EOL, $output);
+exec('git add .', $outputLines);
+$outputContent = implode(PHP_EOL, $outputLines);
 echo $outputContent . PHP_EOL;
 
 
-exec('git status', $output);
-$outputContent = implode(PHP_EOL, $output);
+exec('git status', $outputLines);
+$outputContent = implode(PHP_EOL, $outputLines);
 echo $outputContent . PHP_EOL;
 
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
-exec('git diff-index --quiet HEAD', $output, $hasChangedFiles);
+exec('git diff-index --quiet HEAD', $outputLines, $hasChangedFiles);
 
 
 // 1 = changed files
@@ -154,4 +150,10 @@ function resolvePublicAccessToken(): string
     }
 
     throw new RuntimeException('Public access token is missing, add it via: "PAT", "GITHUB_TOKEN" or "GITLAB_TOKEN" ');
+}
+
+
+function list_directory_files(string $directory) {
+    exec('ls -la ' . $directory, $outputLines);
+    echo implode(PHP_EOL, $outputLines);
 }
