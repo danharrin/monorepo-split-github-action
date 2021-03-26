@@ -77,7 +77,7 @@ $commitMessage = createCommitMessage($currentCommitHash);
 
 $formerWorkingDirectory = getcwd();
 chdir($buildDirectory);
-note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory);
+note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory));
 
 
 exec('git add .', $outputLines);
@@ -111,7 +111,7 @@ if ($hasChangedFiles === 1) {
 
 // restore original directory to avoid nesting WTFs
 chdir($formerWorkingDirectory);
-note(sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory);
+note(sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory));
 
 
 
