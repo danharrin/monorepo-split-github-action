@@ -22,14 +22,6 @@ function note()
 }
 
 
-# arg number
-if [ -z ${1+x} ];
-then
-    note "No arguments supplied. 8 required"
-    exit 0
-fi
-
-
 note "Starts"
 
 PACKAGE_DIRECTORY="$1"
