@@ -21,6 +21,14 @@ function note()
     printf "\n${NO_COLOR}";
 }
 
+
+if [ $# -eq 0 ]
+then
+    note "No arguments supplied. 8 required"
+    exit 0
+fi
+
+
 note "Starts"
 
 PACKAGE_DIRECTORY="$1"
