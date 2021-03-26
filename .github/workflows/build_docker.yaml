@@ -29,7 +29,7 @@ jobs:
                     context: .
                     file: .docker/Dockerfile
                     push: true
-                    tags: symplify/monorepo-split-github-action:latest
+                    tags: ghcr.io/symplify/monorepo-split-github-action:latest
 
             # docker-build . --quiet returns the ID of build container, so we can run it immediately
             - name: Test Docker image
