@@ -6,7 +6,7 @@ on:
             - main
 
 jobs:
-    base_image:
+    publish_image:
         name: Push Docker image to GitHub Packages
         runs-on: ubuntu-latest
         steps:
@@ -22,14 +22,6 @@ jobs:
                     repository: symplify/monorepo-split-github-action/splitter
                     tag_with_ref: true
 
-    build_docker:
-        runs-on: ubuntu-latest
-
-        steps:
-            -
-                uses: actions/checkout@v2
-
-            -   run: docker build .
-
             # docker-build . --quiet returns the ID of build container, so we can run it immediately
-            -   run: docker run $(docker build . --quiet)
+            - name: Test Docker image
+              run: docker run $(docker build . --quiet)

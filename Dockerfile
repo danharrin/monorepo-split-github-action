@@ -1,4 +1,4 @@
-FROM docker.pkg.github.com/symplify/monorepo-split-github-action/splitter
+FROM docker.pkg.github.com/symplify/monorepo-split-github-action/splitter:main
 
 # directory inside docker
 WORKDIR /project
