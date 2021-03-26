@@ -1,4 +1,6 @@
-#!/bin/sh -l
+#!/bin/bash
+
+# @todo switch to PHP!!!
 
 # show colors
 export TERM=xterm-color
@@ -21,6 +23,13 @@ function note()
     printf "\n${NO_COLOR}";
 }
 
+
+# Check if any arguments are provided
+if [ -z ${1+x} ];
+then
+    note "No arguments supplied. 8 required"
+    exit 0
+fi
 
 note "Starts"
 
