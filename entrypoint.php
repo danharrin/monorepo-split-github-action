@@ -90,10 +90,6 @@ note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $b
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec('git diff-index --quiet HEAD', $outputLines, $hasChangedFiles);
-// remove current repository .git, to avoid committing into same repository
-$currentRepositoryGitDirectory = $formerWorkingDirectory . '/.git';
-// cleanup old unused data to avoid pushing them
-exec('rm -rf ' . $currentRepositoryGitDirectory);
 
 
 // 1 = changed files
