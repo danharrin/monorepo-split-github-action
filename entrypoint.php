@@ -54,9 +54,9 @@ mkdir($buildDirectory . '/.git', 0777, true);
 $copyGitDirectoryCommandLine = sprintf('cp -r %s %s', $cloneDirectory . '/.git', $buildDirectory . '/.git');
 exec($copyGitDirectoryCommandLine, $outputLines, $exitCode);
 
-note('Files of cloned directory');
+note(sprintf('Files of "%s" directory', $cloneDirectory));
 list_directory_files($cloneDirectory);
-note('Files of build directory');
+note(sprintf('Files of "%s" directory', $buildDirectory));
 list_directory_files($buildDirectory);
 
 
