@@ -36,8 +36,8 @@ if ($userEmail) {
 }
 
 
-$cloneDirectory = getcwd() . '/clone_directory';
-$buildDirectory = getcwd() . '/build_directory';
+$cloneDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory';
+$buildDirectory = sys_get_temp_dir() . '/monorepo_split/build_directory';
 
 $hostRepositoryOrganizationName = $splitRepositoryHost. '/' . $splitRepositoryOrganization . '/' . $splitRepositoryName . '.git';
 
@@ -65,7 +65,7 @@ exec('rm -rf ' . $cloneDirectory);
 // copy the package directory including all hidden files to the clone dir
 // make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
 note("Copying contents to git repo of '$branch' branch");
-exec(sprintf('cp -Ra %s %s', $packageDirectory . '/.', $buildDirectory));
+exec(sprintf('cp -ra %s %s', $packageDirectory . '/.', $buildDirectory));
 
 note('Files that will be pushed');
 list_directory_files($buildDirectory);
