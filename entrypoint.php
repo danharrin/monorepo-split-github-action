@@ -89,16 +89,19 @@ note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $b
 
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
+exec('git status', $outputLines);
+print_output_lines($outputLines);
+
 exec('git diff-index --quiet HEAD', $outputLines, $hasChangedFiles);
 
 
 // 1 = changed files
 // 0 = no changed files
+
 if ($hasChangedFiles === 1) {
     note('Adding git commit');
     exec('git add .', $outputLines);
-    $outputContent = implode(PHP_EOL, $outputLines);
-    echo $outputContent . PHP_EOL;
+    print_output_lines($outputLines);
 
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $branch);
     note($message);
@@ -158,5 +161,14 @@ function resolve_public_access_token(): string
 
 function list_directory_files(string $directory) {
     exec('ls -la ' . $directory, $outputLines);
+    print_output_lines($outputLines);
+}
+
+/**
+ * @param string[] $outputLines
+ */
+function print_output_lines(array $outputLines): void
+{
     echo implode(PHP_EOL, $outputLines);
 }
+
