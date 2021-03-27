@@ -79,6 +79,7 @@ $commitMessage = createCommitMessage($currentCommitHash);
 $formerWorkingDirectory = getcwd();
 chdir($buildDirectory);
 note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory));
+note('Current directory: ' . getcwd());
 
 
 exec('git add .', $outputLines);
@@ -102,6 +103,7 @@ exec('rm -rf ' . $currentRepositoryGitDirectory);
 // 1 = changed files
 // 0 = no changed files
 if ($hasChangedFiles === 1) {
+    note('Current directory: ' . getcwd());
     note('Adding git commit');
 
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $branch);
@@ -117,7 +119,7 @@ if ($hasChangedFiles === 1) {
 // restore original directory to avoid nesting WTFs
 chdir($formerWorkingDirectory);
 note(sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory));
-
+note('Current directory: ' . getcwd());
 
 
 // push tag if present
