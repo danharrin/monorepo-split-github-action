@@ -51,7 +51,7 @@ note('Cleaning destination repository of old files');
 // We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
 mkdir($buildDirectory . '/.git', 0777, true);
 
-$copyGitDirectoryCommandLine = sprintf('cp -r %s %s', $cloneDirectory . '/.git', $buildDirectory . '/.git');
+$copyGitDirectoryCommandLine = sprintf('cp -r %s %s', $cloneDirectory . '/.git', $buildDirectory);
 exec($copyGitDirectoryCommandLine, $outputLines, $exitCode);
 
 note(sprintf('Files of "%s" directory', $cloneDirectory));
