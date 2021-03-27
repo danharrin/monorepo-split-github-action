@@ -36,8 +36,8 @@ if ($userEmail) {
 }
 
 
-$cloneDirectory = 'clone_directory';
-$buildDirectory = 'build_directory';
+$cloneDirectory = getcwd() . '/clone_directory';
+$buildDirectory = getcwd() . '/build_directory';
 
 $hostRepositoryOrganizationName = $splitRepositoryHost. '/' . $splitRepositoryOrganization . '/' . $splitRepositoryName . '.git';
 
