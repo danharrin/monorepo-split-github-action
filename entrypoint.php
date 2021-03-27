@@ -50,8 +50,15 @@ exec('git clone -- https://' . $publicAccessTokens . '@' . $hostRepositoryOrgani
 note('Cleaning destination repository of old files');
 // We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
 mkdir($buildDirectory . '/.git', 0777, true);
-exec(sprintf('cp -r %s %s', $cloneDirectory . '/.git', $buildDirectory . '/.git'), $outputLines, $exitCode);
+
+$copyGitDirectoryCommandLine = sprintf('cp -r %s %s', $cloneDirectory . '/.git', $buildDirectory . '/.git');
+exec($copyGitDirectoryCommandLine, $outputLines, $exitCode);
+
+note('Files of cloned directory');
 list_directory_files($cloneDirectory);
+note('Files of build directory');
+list_directory_files($buildDirectory);
+
 
 if ($exitCode === 1) {
     die('Command failed');
