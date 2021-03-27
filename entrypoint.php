@@ -60,6 +60,14 @@ note(sprintf('Files of "%s" directory', $buildDirectory));
 list_directory_files($buildDirectory);
 
 
+// debug
+exec('cd ' . $buildDirectory . ' && git status', $outputLines);
+print_output_lines($outputLines);
+
+exec('cd ' . $cloneDirectory . ' && git status', $outputLines);
+print_output_lines($outputLines);
+
+
 if ($exitCode === 1) {
     die('Command failed');
 }
@@ -87,10 +95,6 @@ $formerWorkingDirectory = getcwd();
 chdir($buildDirectory);
 note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory));
 
-
-// debug
-exec('cd ' . $buildDirectory . ' && git status', $outputLines);
-print_output_lines($outputLines);
 
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
