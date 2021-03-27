@@ -51,6 +51,7 @@ note('Cleaning destination repository of old files');
 // We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
 mkdir($buildDirectory . '/.git', 0777, true);
 exec(sprintf('cp -Ra %s %s', $cloneDirectory . '/.git', $buildDirectory . '/.git'), $outputLines, $exitCode);
+list_directory_files($buildDirectory);
 
 if ($exitCode === 1) {
     die('Command failed');
