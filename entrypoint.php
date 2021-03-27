@@ -138,7 +138,7 @@ function createCommitMessage(string $commitSha): string
 
 function note(string $message)
 {
-    echo PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
+    echo PHP_EOL . PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
 }
 
 
