@@ -23,7 +23,7 @@ $currentCommitHash = getenv('GITHUB_SHA');
 
 
 // setup access token to push repository (GitHub or Gitlab supported)
-$publicAccessTokens = resolvePublicAccessToken();
+$publicAccessTokens = resolve_public_access_token();
 
 
 // setup git user + email
@@ -138,7 +138,7 @@ function note(string $message)
 }
 
 
-function resolvePublicAccessToken(): string
+function resolve_public_access_token(): string
 {
     if (getenv('PAT')) {
         return getenv('PAT');
