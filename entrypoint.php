@@ -82,16 +82,6 @@ note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $b
 note('Current directory: ' . getcwd());
 
 
-exec('git add .', $outputLines);
-$outputContent = implode(PHP_EOL, $outputLines);
-echo $outputContent . PHP_EOL;
-
-
-exec('git status', $outputLines);
-$outputContent = implode(PHP_EOL, $outputLines);
-echo $outputContent . PHP_EOL;
-
-
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec('git diff-index --quiet HEAD', $outputLines, $hasChangedFiles);
 // remove current repository .git, to avoid committing into same repository
@@ -103,8 +93,15 @@ exec('rm -rf ' . $currentRepositoryGitDirectory);
 // 1 = changed files
 // 0 = no changed files
 if ($hasChangedFiles === 1) {
-    note('Current directory: ' . getcwd());
     note('Adding git commit');
+    exec('git add .', $outputLines);
+    $outputContent = implode(PHP_EOL, $outputLines);
+    echo $outputContent . PHP_EOL;
+
+
+    exec('git status', $outputLines);
+    $outputContent = implode(PHP_EOL, $outputLines);
+    echo $outputContent . PHP_EOL;
 
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $branch);
     note($message);
