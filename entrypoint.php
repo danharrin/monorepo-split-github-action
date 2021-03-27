@@ -98,11 +98,6 @@ if ($hasChangedFiles === 1) {
     $outputContent = implode(PHP_EOL, $outputLines);
     echo $outputContent . PHP_EOL;
 
-
-    exec('git status', $outputLines);
-    $outputContent = implode(PHP_EOL, $outputLines);
-    echo $outputContent . PHP_EOL;
-
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $branch);
     note($message);
 
