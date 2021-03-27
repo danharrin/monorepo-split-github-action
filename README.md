@@ -1,19 +1,30 @@
 # GitHub Action for Monorepo Split
 
-Based heavily on [cpina/github-action-push-to-another-repository](https://github.com/cpina/github-action-push-to-another-repository), with focus on automated monorepo splits.
+Do you have [a monorepo](https://tomasvotruba.com/cluster/monorepo-from-zero-to-hero/) project on GitHub and need split packages to many repositories? Add this GitHub Action to your workflow and let it split your packages on every commit and tag.
 
 ### How does the Split Result Look Like?
 
 This repository splits tests into [symplify/monorepo-split-github-action-test](https://github.com/symplify/monorepo-split-github-action-test) repository.
 
 Not on every commit, but only if contents of `/tests/packages/some-package` directory changes.
+Try it yourself - send PR with change in [that directory](/tests/packages/some-package).
 
-Try it yourself - send PR with change in that directory.
+<br>
 
-## Example
+## Config
 
+Split is basically git push or local directory to remote git repository. This remote repository can be located on GitHub or Gitlab. To be able to do that, it needs `GITHUB_TOKEN` or `GITLAB_TOKEN` with write repository access:
 
-### Split Packages Without and With Tag
+```yaml
+env:
+    GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+```
+
+Make sure to add this access token in "Secrets" of package settings: https://github.com/<organization>/<package>/settings/secrets/actions
+
+<br>
+
+## Split Packages Without and With Tag
 
 ```yaml
 name: 'Packages Split'
