@@ -86,7 +86,6 @@ $commitMessage = createCommitMessage($currentCommitHash);
 $formerWorkingDirectory = getcwd();
 chdir($buildDirectory);
 note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory));
-note('Current directory: ' . getcwd());
 
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
@@ -118,7 +117,6 @@ if ($hasChangedFiles === 1) {
 // restore original directory to avoid nesting WTFs
 chdir($formerWorkingDirectory);
 note(sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory));
-note('Current directory: ' . getcwd());
 
 
 // push tag if present
