@@ -44,7 +44,7 @@ $hostRepositoryOrganizationName = $splitRepositoryHost. '/' . $splitRepositoryOr
 // info
 $clonedRepository='https://' . $hostRepositoryOrganizationName;
 note(sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory));
-exec('git clone -- https://' . $publicAccessTokens . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory);
+exec('git clone -b ' . $branch . ' -- https://' . $publicAccessTokens . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory);
 
 
 note('Cleaning destination repository of old files');
