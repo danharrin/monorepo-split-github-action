@@ -31,7 +31,10 @@ $clonedRepository='https://' . $hostRepositoryOrganizationName;
 $cloningMessage = sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory);
 note($cloningMessage);
 
-$commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
+if (isset($branch))
+    $commandLine = 'git clone -b ' . $branch . ' -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
+else
+    $commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
 exec_with_note($commandLine);
 
 
