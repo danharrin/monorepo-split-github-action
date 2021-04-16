@@ -66,7 +66,8 @@ exec('rm -rf ' . $cloneDirectory);
 // copy the package directory including all hidden files to the clone dir
 // make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
 note("Copying contents to git repo of '$branch' branch");
-exec(sprintf('cp -ra %s %s', $packageDirectory . '/.', $buildDirectory));
+$commandLine = sprintf('cp -ra %s %s', $packageDirectory . '/.', $buildDirectory);
+exec($commandLine);
 
 note('Files that will be pushed');
 list_directory_files($buildDirectory);
@@ -118,15 +119,21 @@ if ($tag) {
     $message = sprintf('Publishing "%s"', $tag);
     note($message);
 
-    exec(sprintf('git tag %s -m "%s"', $tag, $message));
+    // [debug] - show existing tags
+    exec('git tag', $outputLines);
+    note('Present tags:');
+    print_output_lines($outputLines);
+
+    $commandLine = sprintf('git tag %s -m "%s"', $tag, $message);
+    exec($commandLine);
     exec('git push --quiet origin ' . $tag);
 }
 
 
 function createCommitMessage(string $commitSha): string
 {
-    exec("git show -s --format=%B $commitSha", $output);
-    return $output[0] ?? '';
+    exec("git show -s --format=%B $commitSha", $outputLines);
+    return $outputLines[0] ?? '';
 }
 
 
