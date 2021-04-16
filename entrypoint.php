@@ -61,7 +61,7 @@ if ($exitCode === 1) {
 
 // cleanup old unused data to avoid pushing them
 exec('rm -rf ' . $cloneDirectory);
-exec('rm -rf .git');
+// exec('rm -rf .git');
 
 
 // copy the package directory including all hidden files to the clone dir
