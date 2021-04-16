@@ -125,8 +125,12 @@ if ($tag) {
     print_output_lines($outputLines);
 
     $commandLine = sprintf('git tag %s -m "%s"', $tag, $message);
+    note('Running: ' . $commandLine);
     exec($commandLine);
-    exec('git push --quiet origin ' . $tag);
+
+    $commandLine = 'git push --quiet origin ' . $tag;
+    note('Running: ' . $commandLine);
+    exec($commandLine);
 }
 
 
