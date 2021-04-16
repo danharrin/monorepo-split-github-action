@@ -110,11 +110,6 @@ if ($hasChangedFiles === 1) {
 }
 
 
-// restore original directory to avoid nesting WTFs
-chdir($formerWorkingDirectory);
-note(sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory));
-
-
 // push tag if present
 if ($tag) {
     $message = sprintf('Publishing "%s"', $tag);
@@ -133,6 +128,11 @@ if ($tag) {
     note('Running: ' . $commandLine);
     exec($commandLine);
 }
+
+
+// restore original directory to avoid nesting WTFs
+chdir($formerWorkingDirectory);
+note(sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory));
 
 
 function createCommitMessage(string $commitSha): string
