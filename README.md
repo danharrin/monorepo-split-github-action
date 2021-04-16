@@ -66,7 +66,7 @@ jobs:
 
             # with tag
             -
-                if: "!startsWith(github.ref, 'refs/tags/')"
+                if: "startsWith(github.ref, 'refs/tags/')"
                 uses: "symplify/monorepo-split-github-action@1.1"
                 with:
                     tag: ${GITHUB_REF#refs/tags/}
