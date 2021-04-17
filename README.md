@@ -1,5 +1,9 @@
 # GitHub Action for Monorepo Split
 
+**Version 2.0 now supports split to GitHub and Gitlab private repositories!**
+
+<br>
+
 Do you have [a monorepo](https://tomasvotruba.com/cluster/monorepo-from-zero-to-hero/) project on GitHub and need split packages to many repositories? Add this GitHub Action to your workflow and let it split your packages on every commit and tag.
 
 ### How does the Split Result Look Like?
@@ -17,6 +21,8 @@ Split is basically git push or local directory to remote git repository. This re
 
 ```yaml
 env:
+    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    # or
     GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 ```
 
@@ -24,7 +30,7 @@ Make sure to add this access token in "Secrets" of package settings: `https://gi
 
 <br>
 
-## Split Packages Without and With Tag
+## Define your GitHub Workflow
 
 ```yaml
 name: 'Packages Split'
