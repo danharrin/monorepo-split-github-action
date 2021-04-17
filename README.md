@@ -36,29 +36,40 @@ on:
         tags:
             - '*'
 
+env:
+    # 1. for Github split
+    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+    # 2. for Gitlab split
+    GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+
 jobs:
     packages_split:
         runs-on: ubuntu-latest
 
+        strategy:
+            fail-fast: false
+            matrix:
+                # define package to repository map
+                package:
+                    -
+                        local_path: 'easy-coding-standard'
+                        split_repository: 'easy-coding-standard'
+
         steps:
-            -
-                uses: actions/checkout@v2
-                # this is required for "WyriHaximus/github-action-get-previous-tag" workflow
-                # see https://github.com/actions/checkout#fetch-all-history-for-all-tags-and-branches
-                with:
-                    fetch-depth: 0
+            -   uses: actions/checkout@v2
 
             # no tag
             -
                 if: "!startsWith(github.ref, 'refs/tags/')"
-                uses: "symplify/monorepo-split-github-action@1.1"
+                uses: "symplify/monorepo-split-github-action@2.0"
                 with:
                     # ↓ split "packages/easy-coding-standard" directory
-                    package-directory: 'packages/easy-coding-standard'
+                    package-directory: 'packages/${{ matrix.package.local_path }}'
 
                     # ↓ into https://github.com/symplify/easy-coding-standard repository
                     split-repository-organization: 'symplify'
-                    split-repository-name: 'easy-coding-standard'
+                    split-repository-name: '${{ matrix.package.split_repository }}'
 
                     # ↓ the user signed under the split commit
                     user-name: "kaizen-ci"
@@ -67,16 +78,16 @@ jobs:
             # with tag
             -
                 if: "startsWith(github.ref, 'refs/tags/')"
-                uses: "symplify/monorepo-split-github-action@1.1"
+                uses: "symplify/monorepo-split-github-action@2.0"
                 with:
                     tag: ${GITHUB_REF#refs/tags/}
 
                     # ↓ split "packages/easy-coding-standard" directory
-                    package-directory: 'packages/easy-coding-standard'
+                    package-directory: 'packages/${{ matrix.package.local_path }}'
 
                     # ↓ into https://github.com/symplify/easy-coding-standard repository
                     split-repository-organization: 'symplify'
-                    split-repository-name: 'easy-coding-standard'
+                    split-repository-name: '${{ matrix.package.split_repository }}'
 
                     # ↓ the user signed under the split commit
                     user-name: "kaizen-ci"
