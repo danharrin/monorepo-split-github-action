@@ -77,6 +77,9 @@ jobs:
                     split-repository-organization: 'symplify'
                     split-repository-name: '${{ matrix.package.split_repository }}'
 
+                    # [optional, with "github.com" as default]
+                    split-repository-host: git.private.com:1234
+
                     # ↓ the user signed under the split commit
                     user-name: "kaizen-ci"
                     user-email: "info@kaizen-ci.org"
@@ -94,6 +97,9 @@ jobs:
                     # ↓ into https://github.com/symplify/easy-coding-standard repository
                     split-repository-organization: 'symplify'
                     split-repository-name: '${{ matrix.package.split_repository }}'
+
+                    # [optional, with "github.com" as default]
+                    split-repository-host: git.private.com:1234
 
                     # ↓ the user signed under the split commit
                     user-name: "kaizen-ci"
