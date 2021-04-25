@@ -2,24 +2,34 @@
 
 declare(strict_types=1);
 
-if ($argc <= 8) {
-    note(sprintf('Not enough arguments supplied. Exactly 8 required, but only %d given', $argc - 1));
-    exit(0);
+// 1. using GitHub
+$platform = getenv('GITHUB_ACTION') ? 'GITHUB' : 'GITLAB';
+
+# @todo use classes for better API
+
+if ($platform === 'GITHUB') {
+    if ($argc <= 8) {
+        note(sprintf('Not enough arguments supplied. Exactly 8 required, but only %d given', $argc - 1));
+        exit(0);
+    } else {
+        note('Starting...');
+    }
+
+    // set variables from command line arguments
+    $packageDirectory = $argv[1];
+    $splitRepositoryOrganization = $argv[2];
+    $splitRepositoryName = $argv[3];
+    $branch = $argv[4];
+    $tag = $argv[5];
+    $userEmail = $argv[6];
+    $userName = $argv[7];
+    $splitRepositoryHost = $argv[8];
+
+    $currentCommitHash = getenv('GITHUB_SHA');
 } else {
-    note('Starting...');
+    // 2. gitlab
+    // @todo
 }
-
-// set variables from command line arguments
-$packageDirectory = $argv[1];
-$splitRepositoryOrganization = $argv[2];
-$splitRepositoryName = $argv[3];
-$branch = $argv[4];
-$tag = $argv[5];
-$userEmail = $argv[6];
-$userName = $argv[7];
-$splitRepositoryHost = $argv[8];
-
-$currentCommitHash = getenv('GITHUB_SHA');
 
 
 // setup access token to push repository (GitHub or Gitlab supported)

@@ -15,6 +15,10 @@ Try it yourself - send PR with change in [that directory](/tests/packages/some-p
 
 <br>
 
+## Docs
+
+- [How to Use on Gitlab](docs/how_to_use_on_gitlab.md)
+
 ## Config
 
 Split is basically git push or local directory to remote git repository. This remote repository can be located on GitHub or Gitlab. To be able to do that, it needs `GITHUB_TOKEN` or `GITLAB_TOKEN` with write repository access:
