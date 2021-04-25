@@ -19,6 +19,15 @@ final class PublicAccessTokenResolver
      */
     private const GITLAB_TOKEN = 'GITLAB_TOKEN';
 
+    /**
+     * @var string[]
+     */
+    private const POSSIBLE_TOKEN_ENVS = [
+        self::PAT,
+        self::GITLAB_TOKEN,
+        self::GITHUB_TOKEN,
+    ];
+
     public function resolve(): string
     {
         if (getenv(self::PAT)) {
@@ -33,6 +42,10 @@ final class PublicAccessTokenResolver
             return 'oauth2:' . getenv(self::GITLAB_TOKEN);
         }
 
-        throw new RuntimeException('Public access token is missing, add it via: "PAT", "GITHUB_TOKEN" or "GITLAB_TOKEN"');
+        $message = sprintf(
+            'Public access token is missing, add it via: "%s"', implode('", "',
+                self::POSSIBLE_TOKEN_ENVS)
+        );
+        throw new RuntimeException($message);
     }
 }
