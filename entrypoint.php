@@ -1,5 +1,7 @@
 <?php
 
+// uses PHP 8.0
+
 declare(strict_types=1);
 
 // 1. using GitHub
@@ -34,7 +36,8 @@ if ($platform === 'GITHUB') {
 // @todo
 
 // setup access token to push repository (GitHub or Gitlab supported)
-$publicAccessTokens = resolve_public_access_token();
+$publicAccessTokenResolver = new PublicAccessTokenResolver();
+$publicAccessTokens = $publicAccessTokenResolver->resolve();
 
 
 // setup git user + email
@@ -151,22 +154,6 @@ function note(string $message)
 }
 
 
-function resolve_public_access_token(): string
-{
-    if (getenv('PAT')) {
-        return getenv('PAT');
-    }
-
-    if (getenv('GITHUB_TOKEN')) {
-        return getenv('GITHUB_TOKEN');
-    }
-
-    if (getenv('GITLAB_TOKEN')) {
-        return 'oauth2:' . getenv('GITLAB_TOKEN');
-    }
-
-    throw new RuntimeException('Public access token is missing, add it via: "PAT", "GITHUB_TOKEN" or "GITLAB_TOKEN" ');
-}
 
 
 function list_directory_files(string $directory) {
@@ -187,4 +174,41 @@ function exec_with_output_print(string $commandLine): void
 {
     exec($commandLine, $outputLines);
     echo implode(PHP_EOL, $outputLines);
+}
+
+/********************* class definitions *********************/
+
+final class PublicAccessTokenResolver
+{
+    /**
+     * @var string
+     */
+    private const PAT = 'PAT';
+
+    /**
+     * @var string
+     */
+    private const GITHUB_TOKEN = 'GITHUB_TOKEN';
+
+    /**
+     * @var string
+     */
+    private const GITLAB_TOKEN = 'GITLAB_TOKEN';
+
+    public function resolve(): string
+    {
+        if (getenv(self::PAT)) {
+            return getenv(self::PAT);
+        }
+
+        if (getenv(self::GITHUB_TOKEN)) {
+            return getenv(self::GITHUB_TOKEN);
+        }
+
+        if (getenv(self::GITLAB_TOKEN)) {
+            return 'oauth2:' . getenv(self::GITLAB_TOKEN);
+        }
+
+        throw new RuntimeException('Public access token is missing, add it via: "PAT", "GITHUB_TOKEN" or "GITLAB_TOKEN"');
+    }
 }
