@@ -1,0 +1,20 @@
+# see .github/workflows/publish_docker_images.yaml:2
+name: Pull Docker Image
+
+on:
+    push:
+        # Publish `main` as Docker `latest` image.
+        branches:
+            - main
+
+jobs:
+    pull_docker_image:
+        runs-on: ubuntu-latest
+
+        steps:
+            -
+                name: 'Pull Docker image'
+                run: docker pull symplify2/monorepo-split:latest
+            -
+                name: 'Run Docker image'
+                run: docker run symplify2/monorepo-split
