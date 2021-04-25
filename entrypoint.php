@@ -5,7 +5,7 @@
 declare(strict_types=1);
 
 // 1. using GitHub
-$platform = getenv('GITLAB_CI') ? 'GITLAB' : 'GITHUB';
+$platform = getenv('GITLAB_CI') !== false ? 'GITLAB' : 'GITHUB';
 
 # @todo use classes for better API
 
