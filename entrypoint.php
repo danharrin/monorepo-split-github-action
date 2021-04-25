@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // 1. using GitHub
-$platform = getenv('GITHUB_ACTION') ? 'GITHUB' : 'GITLAB';
+$platform = getenv('GITLAB_CI') ? 'GITLAB' : 'GITHUB';
 
 # @todo use classes for better API
 
@@ -31,6 +31,7 @@ if ($platform === 'GITHUB') {
     // @todo
 }
 
+// @todo
 
 // setup access token to push repository (GitHub or Gitlab supported)
 $publicAccessTokens = resolve_public_access_token();
