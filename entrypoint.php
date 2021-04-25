@@ -31,11 +31,18 @@ if ($platform === 'GITHUB') {
 
     $currentCommitHash = getenv('GITHUB_SHA');
 } else {
-    // 2. gitlab
-    // @todo
+    // 2. gitlab - make use of env variables
+    $packageDirectory = getenv('PACKAGE_DIRECTORY');
+    $branch = getenv('BRANCH') ?? 'main';
+    $tag = getenv('TAG') ?? null;
+    $userName = getenv('USER_NAME');
+    $userEmail = getenv('USER_EMAIL');
+
+    $splitRepositoryHost = getenv('SPLIT_REPOSITORY_HOST') ?? 'gitlab.com';
+    $splitRepositoryOrganization = getenv('SPLIT_REPOSITORY_ORGANIZATION');
+    $splitRepositoryName = getenv('SPLIT_REPOSITORY');
 }
 
-// @todo
 
 // setup access token to push repository (GitHub or Gitlab supported)
 $publicAccessTokenResolver = new PublicAccessTokenResolver();
