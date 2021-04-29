@@ -1,8 +1,19 @@
 includes:
-
+    # see https://github.com/symplify/phpstan-rules
+    - vendor/symplify/phpstan-rules/config/static-rules.neon
 
 parameters:
     level: max
     paths:
         - src
         - entrypoint.php
+
+    ignoreErrors:
+        -
+            message: '#"%s" in sprintf\(\) format must be quoted#'
+            path: entrypoint.php
+
+        # false positive, should be fixed in symplify
+        -
+            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have 5 nesting#'
+            path: src/ConfigFactory.php

@@ -28,7 +28,8 @@ $hostRepositoryOrganizationName = $config->getGitRepository();
 
 // info
 $clonedRepository='https://' . $hostRepositoryOrganizationName;
-note(sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory));
+$cloningMessage = sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory);
+note($cloningMessage);
 
 $commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
 exec_with_note($commandLine);
@@ -53,7 +54,8 @@ exec('rm -rf ' . $cloneDirectory);
 
 // copy the package directory including all hidden files to the clone dir
 // make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
-note(sprintf('Copying contents to git repo of "%s" branch', $config->getCommitHash()));
+$copyMessage = sprintf('Copying contents to git repo of "%s" branch', $config->getCommitHash());
+note($copyMessage);
 $commandLine = sprintf('cp -ra %s %s', $config->getLocalDirectory() . '/.', $buildDirectory);
 exec($commandLine);
 
@@ -68,7 +70,9 @@ $commitMessage = createCommitMessage($config->getCommitHash());
 
 $formerWorkingDirectory = getcwd();
 chdir($buildDirectory);
-note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory));
+
+$restoreChdirMessage = sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory);
+note($restoreChdirMessage);
 
 
 
@@ -109,7 +113,8 @@ if ($config->getTag()) {
 
 // restore original directory to avoid nesting WTFs
 chdir($formerWorkingDirectory);
-note(sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory));
+$chdirMessage = sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory);
+note($chdirMessage);
 
 
 function createCommitMessage(string $commitSha): string
