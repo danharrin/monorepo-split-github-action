@@ -2,49 +2,35 @@
 
 declare(strict_types=1);
 
+use Symplify\MonorepoSplit\Config;
 use Symplify\MonorepoSplit\ConfigFactory;
-use Symplify\MonorepoSplit\PublicAccessTokenResolver;
+use Symplify\MonorepoSplit\Exception\ConfigurationException;
 
-require_once __DIR__ . '/src/PublicAccessTokenResolver.php';
-require_once __DIR__ . '/src/Config.php';
-require_once __DIR__ . '/src/ConfigFactory.php';
-
-$configFactory = new ConfigFactory();
+require_once __DIR__ . '/src/autoload.php';
 
 note('Resolving configuration...');
 
-$config = $configFactory->create($argv, getenv());
-
-var_dump($config);
-die;
-
-
-
-// setup access token to push repository (GitHub or Gitlab supported)
-$publicAccessTokenResolver = new PublicAccessTokenResolver();
-$publicAccessTokens = $publicAccessTokenResolver->resolve();
-
-
-// setup git user + email
-if ($userName) {
-    exec('git config --global user.name ' . $userName);
+$configFactory = new ConfigFactory();
+try {
+    $config = $configFactory->create($argv, getenv());
+} catch (ConfigurationException $configurationException) {
+    error($configurationException->getMessage());
+    exit(0);
 }
 
-if ($userEmail) {
-    exec('git config --global user.email ' . $userEmail);
-}
+setupGitCredentials($config);
 
 
 $cloneDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory';
 $buildDirectory = sys_get_temp_dir() . '/monorepo_split/build_directory';
 
-$hostRepositoryOrganizationName = $splitRepositoryHost. '/' . $splitRepositoryOrganization . '/' . $splitRepositoryName . '.git';
+$hostRepositoryOrganizationName = $config->getGitRepository();
 
 // info
 $clonedRepository='https://' . $hostRepositoryOrganizationName;
 note(sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory));
 
-$commandLine = 'git clone -- https://' . $publicAccessTokens . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
+$commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
 exec_with_note($commandLine);
 
 
@@ -67,8 +53,8 @@ exec('rm -rf ' . $cloneDirectory);
 
 // copy the package directory including all hidden files to the clone dir
 // make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
-note("Copying contents to git repo of '$branch' branch");
-$commandLine = sprintf('cp -ra %s %s', $packageDirectory . '/.', $buildDirectory);
+note(sprintf('Copying contents to git repo of "%s" branch', $config->getCurrentBranch()));
+$commandLine = sprintf('cp -ra %s %s', $config->getLocalDirectory() . '/.', $buildDirectory);
 exec($commandLine);
 
 note('Files that will be pushed');
@@ -77,7 +63,7 @@ list_directory_files($buildDirectory);
 
 // WARNING! this function happen before we change directory
 // if we do this in split repository, the original hash is missing there and it will fail
-$commitMessage = createCommitMessage($currentCommitHash);
+$commitMessage = createCommitMessage($config->getCurrentCommitHash());
 
 
 $formerWorkingDirectory = getcwd();
@@ -110,8 +96,8 @@ if ($hasChangedFiles === 1) {
 
 
 // push tag if present
-if ($tag) {
-    $message = sprintf('Publishing "%s"', $tag);
+if ($config->getCurrentTag()) {
+    $message = sprintf('Publishing "%s"', $config->getCurrentTag());
     note($message);
 
     $commandLine = sprintf('git tag %s -m "%s"', $tag, $message);
@@ -138,6 +124,11 @@ function note(string $message)
     echo PHP_EOL . PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
 }
 
+function error(string $message)
+{
+    echo PHP_EOL . PHP_EOL . "\033[0;31m[ERROR] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
+}
+
 
 
 
@@ -159,4 +150,16 @@ function exec_with_output_print(string $commandLine): void
 {
     exec($commandLine, $outputLines);
     echo implode(PHP_EOL, $outputLines);
+}
+
+
+function setupGitCredentials(Config $config): void
+{
+    if ($config->getGitUserName()) {
+        exec('git config --global user.name ' . $config->getGitUserName());
+    }
+
+    if ($config->getGitUserEmail()) {
+        exec('git config --global user.email ' . $config->getGitUserEmail());
+    }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Symplify\MonorepoSplit;
 
-use RuntimeException;
+use Symplify\MonorepoSplit\Exception\ConfigurationException;
 
 final class PublicAccessTokenResolver
 {
@@ -32,25 +32,28 @@ final class PublicAccessTokenResolver
         self::GITHUB_TOKEN,
     ];
 
-    public function resolve(): string
+    /**
+     * @param array<string, mixed> $env
+     */
+    public function resolve(array $env): string
     {
-        if (getenv(self::PAT)) {
-            return getenv(self::PAT);
+        if (isset($env[self::PAT])) {
+            return $env[self::PAT];
         }
 
-        if (getenv(self::GITHUB_TOKEN)) {
-            return getenv(self::GITHUB_TOKEN);
+        if (isset($env[self::GITHUB_TOKEN])) {
+            return $env[self::GITHUB_TOKEN];
         }
 
-        if (getenv(self::GITLAB_TOKEN)) {
-            return 'oauth2:' . getenv(self::GITLAB_TOKEN);
+        if (isset($env[self::GITLAB_TOKEN])) {
+            return 'oauth2:' . $env[self::GITLAB_TOKEN];
         }
 
         $message = sprintf(
-            'Public access token is missing, add it via: "%s"', implode('", "',
-                self::POSSIBLE_TOKEN_ENVS)
+            'Public access token is missing, add it via: "%s"',
+            implode('", "', self::POSSIBLE_TOKEN_ENVS)
         );
 
-        throw new RuntimeException($message);
+        throw new ConfigurationException($message);
     }
 }

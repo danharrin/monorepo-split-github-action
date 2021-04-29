@@ -29,6 +29,13 @@ final class ConfigFactory
      */
     private const DEFAULT_GITLAB_HOST = 'gitlab.com';
 
+    private PublicAccessTokenResolver $publicAccessTokenResolver;
+
+    public function __construct()
+    {
+        $this->publicAccessTokenResolver = new PublicAccessTokenResolver();
+    }
+
     /**
      * @param array<int, mixed> $argv
      * @param array<string, mixed> $env
@@ -36,12 +43,13 @@ final class ConfigFactory
     public function create(array $argv, array $env): Config
     {
         $ciPlatform = $this->resolvePlatform($env);
+        $accessToken = $this->publicAccessTokenResolver->resolve($env);
 
         if ($ciPlatform === self::GITHUB) {
-            return $this->createForGitHub($argv, $env);
+            return $this->createForGitHub($argv, $env, $accessToken);
         }
 
-        return $this->createForGitlab($env);
+        return $this->createForGitlab($env, $accessToken);
     }
 
     /**
@@ -61,7 +69,7 @@ final class ConfigFactory
      * @param array<int, mixed> $argv
      * @param array<string, mixed> $env
      */
-    private function createForGitHub(array $argv, array $env): Config
+    private function createForGitHub(array $argv, array $env, string $accessToken): Config
     {
         return new Config(
             localDirectory: $argv[1] ?? throw new ConfigurationException('Package directory is missing'),
@@ -74,14 +82,15 @@ final class ConfigFactory
             currentTag: $argv[5] ?? null,
             gitUserName: $argv[7] ?? null,
             gitUserEmail: $argv[6] ?? null,
-            currentCommitHash: $env['GITHUB_SHA'] ?? throw new ConfigurationException('Commit hash is missing')
+            currentCommitHash: $env['GITHUB_SHA'] ?? throw new ConfigurationException('Commit hash is missing'),
+            accessToken: $accessToken
         );
     }
 
     /**
      * @param array<string, mixed> $env
      */
-    private function createForGitlab(array $env): Config
+    private function createForGitlab(array $env, string $accessToken): Config
     {
         return new Config(
             localDirectory: $env['PACKAGE_DIRECTORY'],
@@ -94,6 +103,7 @@ final class ConfigFactory
             gitUserName: $env['USER_NAME'] ?? null,
             gitUserEmail: $env['USER_EMAIL'] ?? null,
             currentTag: $env['TAG'] ?? null,
+            accessToken: $accessToken
         );
     }
 }

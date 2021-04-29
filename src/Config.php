@@ -18,6 +18,7 @@ final class Config
         private ?string $currentTag,
         private ?string $gitUserName,
         private ?string $gitUserEmail,
+        private string $accessToken
     ) {
     }
 
@@ -64,5 +65,15 @@ final class Config
     public function getCurrentCommitHash(): ?string
     {
         return $this->currentCommitHash;
+    }
+
+    public function getAccessToken(): string
+    {
+        return $this->accessToken;
+    }
+
+    public function getGitRepository(): string
+    {
+        return $this->splitRepositoryHost . '/' . $this->splitRepositoryOrganiation . '/' . $this->splitRepositoryName . '.git';
     }
 }

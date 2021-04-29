@@ -9,9 +9,9 @@
         "phpstan/phpstan": "^0.12.85"
     },
     "autoload-dev": {
-        "psr-4": {
-            "Symplify\\MonorepoSplit\\": "src"
-        }
+        "files": [
+            "src/autoload.php"
+        ]
     },
     "scripts": {
         "phpstan": "vendor/bin/phpstan analyse --ansi"
