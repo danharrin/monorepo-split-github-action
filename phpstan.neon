@@ -1,4 +1,8 @@
+includes:
+
+
 parameters:
-    level: 8
+    level: max
     paths:
         - src
+        - entrypoint.php

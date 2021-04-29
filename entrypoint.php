@@ -53,7 +53,7 @@ exec('rm -rf ' . $cloneDirectory);
 
 // copy the package directory including all hidden files to the clone dir
 // make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
-note(sprintf('Copying contents to git repo of "%s" branch', $config->getCurrentBranch()));
+note(sprintf('Copying contents to git repo of "%s" branch', $config->getCommitHash()));
 $commandLine = sprintf('cp -ra %s %s', $config->getLocalDirectory() . '/.', $buildDirectory);
 exec($commandLine);
 
@@ -63,7 +63,7 @@ list_directory_files($buildDirectory);
 
 // WARNING! this function happen before we change directory
 // if we do this in split repository, the original hash is missing there and it will fail
-$commitMessage = createCommitMessage($config->getCurrentCommitHash());
+$commitMessage = createCommitMessage($config->getCommitHash());
 
 
 $formerWorkingDirectory = getcwd();
@@ -85,25 +85,25 @@ if ($hasChangedFiles === 1) {
     note('Adding git commit');
     exec_with_output_print('git add .');
 
-    $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $branch);
+    $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
     note($message);
 
     exec("git commit --message '$commitMessage'");
-    exec('git push --quiet origin ' . $branch);
+    exec('git push --quiet origin ' . $config->getBranch());
 } else {
     note('No files to change');
 }
 
 
 // push tag if present
-if ($config->getCurrentTag()) {
-    $message = sprintf('Publishing "%s"', $config->getCurrentTag());
+if ($config->getTag()) {
+    $message = sprintf('Publishing "%s"', $config->getTag());
     note($message);
 
-    $commandLine = sprintf('git tag %s -m "%s"', $tag, $message);
+    $commandLine = sprintf('git tag %s -m "%s"', $config->getTag(), $message);
     exec_with_note($commandLine);
 
-    exec_with_note('git push --quiet origin ' . $tag);
+    exec_with_note('git push --quiet origin ' . $config->getTag());
 }
 
 
@@ -119,12 +119,12 @@ function createCommitMessage(string $commitSha): string
 }
 
 
-function note(string $message)
+function note(string $message): void
 {
     echo PHP_EOL . PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
 }
 
-function error(string $message)
+function error(string $message): void
 {
     echo PHP_EOL . PHP_EOL . "\033[0;31m[ERROR] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
 }
@@ -132,7 +132,7 @@ function error(string $message)
 
 
 
-function list_directory_files(string $directory) {
+function list_directory_files(string $directory): void {
     exec_with_output_print('ls -la ' . $directory);
 }
 

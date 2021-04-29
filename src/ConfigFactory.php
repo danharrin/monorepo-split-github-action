@@ -71,12 +71,12 @@ final class ConfigFactory
             ),
             splitRepositoryName: $env[$envPrefix . 'SPLIT_REPOSITORY_NAME'] ?? throw new ConfigurationException('Repository name is missing'),
             // optional
-            currentBranch: $env[$envPrefix . 'BRANCH'] ?? null,
-            currentTag: $env[$envPrefix . 'TAG'] ?? null,
+            branch: $env[$envPrefix . 'BRANCH'] ?? null,
+            tag: $env[$envPrefix . 'TAG'] ?? null,
             gitUserName: $env[$envPrefix . 'USER_EMAIL'] ?? null,
             gitUserEmail: $env[$envPrefix . 'USER_NAME'] ?? null,
             // required
-            currentCommitHash: $commitSha,
+            commitHash: $commitSha,
             accessToken: $accessToken
         );
     }

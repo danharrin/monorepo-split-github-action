@@ -13,9 +13,9 @@ final class Config
         private string $splitRepositoryHost,
         private string $splitRepositoryOrganiation,
         private string $splitRepositoryName,
-        private string $currentCommitHash,
-        private ?string $currentBranch,
-        private ?string $currentTag,
+        private string $commitHash,
+        private string $branch,
+        private ?string $tag,
         private ?string $gitUserName,
         private ?string $gitUserEmail,
         private string $accessToken
@@ -52,19 +52,19 @@ final class Config
         return $this->gitUserEmail;
     }
 
-    public function getCurrentBranch(): ?string
+    public function getBranch(): ?string
     {
-        return $this->currentBranch;
+        return $this->branch;
     }
 
-    public function getCurrentTag(): ?string
+    public function getTag(): ?string
     {
-        return $this->currentTag;
+        return $this->tag;
     }
 
-    public function getCurrentCommitHash(): ?string
+    public function getCommitHash(): string
     {
-        return $this->currentCommitHash;
+        return $this->commitHash;
     }
 
     public function getAccessToken(): string
