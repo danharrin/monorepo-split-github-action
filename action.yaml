@@ -1,6 +1,8 @@
-name: 'Monorepo Split'
+# see https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#about-yaml-syntax-for-github-actions
 
+name: 'Monorepo Split'
 description: 'Split monorepo packages to many repositories'
+author: "Tomas Votruba <tomas.vot@gmail.com>"
 
 inputs:
     package-directory:
