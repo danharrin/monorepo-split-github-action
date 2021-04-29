@@ -1,7 +1,5 @@
 <?php
 
-// uses PHP 8.0
-
 declare(strict_types=1);
 
 use Symplify\MonorepoSplit\ConfigFactory;
@@ -16,6 +14,7 @@ $configFactory = new ConfigFactory();
 note('Resolving configuration...');
 
 $config = $configFactory->create($argv, getenv());
+
 var_dump($config);
 die;
 

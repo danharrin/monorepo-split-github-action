@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Symplify\MonorepoSplit;
 
+use RuntimeException;
+
 final class PublicAccessTokenResolver
 {
     /**
@@ -48,6 +50,7 @@ final class PublicAccessTokenResolver
             'Public access token is missing, add it via: "%s"', implode('", "',
                 self::POSSIBLE_TOKEN_ENVS)
         );
+
         throw new RuntimeException($message);
     }
 }
