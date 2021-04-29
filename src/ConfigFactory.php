@@ -43,12 +43,9 @@ final class ConfigFactory
     {
         $ciPlatform = $this->resolvePlatform($env);
         $accessToken = $this->publicAccessTokenResolver->resolve($env);
+        $commitSha = $this->resolveCommitSha($ciPlatform, $env);
 
-        if ($ciPlatform === self::GITHUB) {
-            return $this->createForGitHub($env, $accessToken);
-        }
-
-        return $this->createForGitlab($env, $accessToken);
+        return $this->createFromEnv($env, $accessToken, $commitSha, $ciPlatform);
     }
 
     /**
@@ -56,31 +53,30 @@ final class ConfigFactory
      */
     private function resolvePlatform(array $env): string
     {
-        // 1. using GitHub
-        if (isset($env['GITLAB_CI'])) {
-            return self::GITLAB;
-        }
-
-        return self::GITHUB;
+        return isset($env['GITLAB_CI']) ? self::GITLAB : self::GITHUB;
     }
 
     /**
      * @param array<string, mixed> $env
      */
-    private function createForGitHub(array $env, string $accessToken): Config
+    private function createFromEnv(array $env, string $accessToken, string $commitSha, string $ciPlatform): Config
     {
+        $envPrefix = $ciPlatform === self::GITHUB ? 'INPUT_' : '';
+
         return new Config(
-            localDirectory: $env['INPUT_PACKAGE_DIRECTORY'] ?? throw new ConfigurationException('Package directory is missing'),
-            splitRepositoryHost: $env['INPUT_SPLIT_REPOSITORY_HOST'] ?? throw new ConfigurationException('Repository host is missing'),
-            splitRepositoryOrganiation: $env['INPUT_SPLIT_REPOSITORY_ORGANIZATION'] ?? throw new ConfigurationException(
+            localDirectory: $env[$envPrefix . 'PACKAGE_DIRECTORY'] ?? throw new ConfigurationException('Package directory is missing'),
+            splitRepositoryHost: $env[$envPrefix . 'SPLIT_REPOSITORY_HOST'] ?? throw new ConfigurationException('Repository host is missing'),
+            splitRepositoryOrganiation: $env[$envPrefix . 'SPLIT_REPOSITORY_ORGANIZATION'] ?? throw new ConfigurationException(
                 'Repository organization is missing'
             ),
-            splitRepositoryName: $env['INPUT_SPLIT_REPOSITORY_NAME'] ?? throw new ConfigurationException('Repository name is missing'),
-            currentBranch: $env['INPUT_BRANCH'] ?? null,
-            currentTag: $env['INPUT_TAG'] ?? null,
-            gitUserName: $env['INPUT_USER_EMAIL'] ?? null,
-            gitUserEmail: $env['INPUT_NAME'] ?? null,
-            currentCommitHash: $env['GITHUB_SHA'] ?? throw new ConfigurationException('Commit hash is missing'),
+            splitRepositoryName: $env[$envPrefix . 'SPLIT_REPOSITORY_NAME'] ?? throw new ConfigurationException('Repository name is missing'),
+            // optional
+            currentBranch: $env[$envPrefix . 'BRANCH'] ?? null,
+            currentTag: $env[$envPrefix . 'TAG'] ?? null,
+            gitUserName: $env[$envPrefix . 'USER_EMAIL'] ?? null,
+            gitUserEmail: $env[$envPrefix . 'USER_NAME'] ?? null,
+            // required
+            currentCommitHash: $commitSha,
             accessToken: $accessToken
         );
     }
@@ -88,20 +84,8 @@ final class ConfigFactory
     /**
      * @param array<string, mixed> $env
      */
-    private function createForGitlab(array $env, string $accessToken): Config
+    private function resolveCommitSha(string $ciPlatform, array $env): string
     {
-        return new Config(
-            localDirectory: $env['PACKAGE_DIRECTORY'],
-            splitRepositoryHost: $env['SPLIT_REPOSITORY_HOST'] ?? self::DEFAULT_GITLAB_HOST,
-            splitRepositoryOrganiation: $env['SPLIT_REPOSITORY_ORGANIZATION'],
-            splitRepositoryName: $env['SPLIT_REPOSITORY'],
-            // @see https://docs.gitlab.com/ee/ci/variables/#enable-debug-logging
-            currentCommitHash: $env['CI_COMMIT_SHA'],
-            currentBranch: $env['BRANCH'] ?? self::DEFAULT_BRANCH,
-            gitUserName: $env['USER_NAME'] ?? null,
-            gitUserEmail: $env['USER_EMAIL'] ?? null,
-            currentTag: $env['TAG'] ?? null,
-            accessToken: $accessToken
-        );
+        return $ciPlatform === self::GITLAB ? $env['CI_COMMIT_SHA'] : $env['GITHUB_SHA'];
     }
 }
