@@ -5,17 +5,17 @@ description: 'Split monorepo packages to many repositories'
 author: "Tomas Votruba <tomas.vot@gmail.com>"
 
 inputs:
-    package-directory:
+    package_directory:
         description: 'Local package directory'
         required: true
-    split-repository-host:
+    split_repository_host:
         description: 'Host'
         default: 'github.com'
         required: false
-    split-repository-organization:
+    split_repository_organization:
         description: 'Remote organization'
         required: true
-    split-repository-name:
+    split_repository_name:
         description: 'Remote repository'
         required: true
     branch:
@@ -25,10 +25,10 @@ inputs:
     tag:
         description: '[Optional] Tag to be released'
         required: false
-    user-email:
+    user_email:
         description: 'Git User Email'
         required: true
-    user-name:
+    user_name:
         description: 'Git User Name'
         required: true
 
@@ -36,14 +36,15 @@ runs:
     using: 'docker'
     image: 'Dockerfile'
     args:
-        - ${{ inputs.package-directory }}
-        - ${{ inputs.split-repository-organization }}
-        - ${{ inputs.split-repository-name }}
+        # "GitHub stores input parameters as environment variables" - important!!!
+        - ${{ inputs.package_directory }} # => INPUT_PACKAGE_DIRECTORY
+        - ${{ inputs.split_repository_organization }}
+        - ${{ inputs.split_repository_name }}
         - ${{ inputs.branch }}
         - ${{ inputs.tag }}
-        - ${{ inputs.user-email }}
-        - ${{ inputs.user-name }}
-        - ${{ inputs.split-repository-host }}
+        - ${{ inputs.user_email }}
+        - ${{ inputs.user_name }}
+        - ${{ inputs.split_repository_host }}
 
 branding:
     icon: maximize-2
