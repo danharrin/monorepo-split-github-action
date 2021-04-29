@@ -4,44 +4,21 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/src/PublicAccessTokenResolver.php';
+use Symplify\MonorepoSplit\ConfigFactory;
+use Symplify\MonorepoSplit\PublicAccessTokenResolver;
 
-// 1. using GitHub
-$platform = getenv('GITLAB_CI') !== false ? 'GITLAB' : 'GITHUB';
+require_once __DIR__ . '/src/PublicAccessTokenResolver.php';
+require_once __DIR__ . '/src/Config.php';
+require_once __DIR__ . '/src/ConfigFactory.php';
 
-# @todo use classes for better API
+$configFactory = new ConfigFactory();
 
-if ($platform === 'GITHUB') {
-    if ($argc <= 8) {
-        note(sprintf('Not enough arguments supplied. Exactly 8 required, but only %d given', $argc - 1));
-        exit(0);
-    } else {
-        note('Starting...');
-    }
+note('Resolving configuration...');
 
-    // set variables from command line arguments
-    $packageDirectory = $argv[1];
-    $splitRepositoryOrganization = $argv[2];
-    $splitRepositoryName = $argv[3];
-    $branch = $argv[4];
-    $tag = $argv[5];
-    $userEmail = $argv[6];
-    $userName = $argv[7];
-    $splitRepositoryHost = $argv[8];
+$config = $configFactory->create($argv, getenv());
+var_dump($config);
+die;
 
-    $currentCommitHash = getenv('GITHUB_SHA');
-} else {
-    // 2. gitlab - make use of env variables
-    $packageDirectory = getenv('PACKAGE_DIRECTORY');
-    $branch = getenv('BRANCH') ?? 'main';
-    $tag = getenv('TAG') ?? null;
-    $userName = getenv('USER_NAME');
-    $userEmail = getenv('USER_EMAIL');
-
-    $splitRepositoryHost = getenv('SPLIT_REPOSITORY_HOST') ?? 'gitlab.com';
-    $splitRepositoryOrganization = getenv('SPLIT_REPOSITORY_ORGANIZATION');
-    $splitRepositoryName = getenv('SPLIT_REPOSITORY');
-}
 
 
 // setup access token to push repository (GitHub or Gitlab supported)
