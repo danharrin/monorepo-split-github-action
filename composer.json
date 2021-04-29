@@ -3,10 +3,12 @@
     "license": "MIT",
     "description": "GitHub Action for splitting monorepo. Composer is for testing PHP code only, not for package shipment",
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.0",
+        "phpstan/extension-installer": "^1.1"
     },
     "require-dev": {
-        "phpstan/phpstan": "^0.12.85"
+        "phpstan/phpstan": "^0.12.85",
+        "symplify/phpstan-extensions": "^9.3"
     },
     "autoload-dev": {
         "files": [
@@ -14,6 +16,6 @@
         ]
     },
     "scripts": {
-        "phpstan": "vendor/bin/phpstan analyse --ansi"
+        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify"
     }
 }

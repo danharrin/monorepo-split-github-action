@@ -12,7 +12,7 @@ note('Resolving configuration...');
 
 $configFactory = new ConfigFactory();
 try {
-    $config = $configFactory->create($argv, getenv());
+    $config = $configFactory->create(getenv());
 } catch (ConfigurationException $configurationException) {
     error($configurationException->getMessage());
     exit(0);

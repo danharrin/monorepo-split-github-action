@@ -37,16 +37,15 @@ final class ConfigFactory
     }
 
     /**
-     * @param array<int, mixed> $argv
      * @param array<string, mixed> $env
      */
-    public function create(array $argv, array $env): Config
+    public function create(array $env): Config
     {
         $ciPlatform = $this->resolvePlatform($env);
         $accessToken = $this->publicAccessTokenResolver->resolve($env);
 
         if ($ciPlatform === self::GITHUB) {
-            return $this->createForGitHub($argv, $env, $accessToken);
+            return $this->createForGitHub($env, $accessToken);
         }
 
         return $this->createForGitlab($env, $accessToken);
@@ -66,22 +65,21 @@ final class ConfigFactory
     }
 
     /**
-     * @param array<int, mixed> $argv
      * @param array<string, mixed> $env
      */
-    private function createForGitHub(array $argv, array $env, string $accessToken): Config
+    private function createForGitHub(array $env, string $accessToken): Config
     {
         return new Config(
-            localDirectory: $argv[1] ?? throw new ConfigurationException('Package directory is missing'),
-            splitRepositoryHost: $argv[8] ?? throw new ConfigurationException('Repository host is missing'),
-            splitRepositoryOrganiation: $argv[2] ?? throw new ConfigurationException(
+            localDirectory: $env['INPUT_PACKAGE_DIRECTORY'] ?? throw new ConfigurationException('Package directory is missing'),
+            splitRepositoryHost: $env['INPUT_SPLIT_REPOSITORY_HOST'] ?? throw new ConfigurationException('Repository host is missing'),
+            splitRepositoryOrganiation: $env['INPUT_SPLIT_REPOSITORY_ORGANIZATION'] ?? throw new ConfigurationException(
                 'Repository organization is missing'
             ),
-            splitRepositoryName: $argv[3] ?? throw new ConfigurationException('Repository name is missing'),
-            currentBranch: $argv[4] ?? null,
-            currentTag: $argv[5] ?? null,
-            gitUserName: $argv[7] ?? null,
-            gitUserEmail: $argv[6] ?? null,
+            splitRepositoryName: $env['INPUT_SPLIT_REPOSITORY_NAME'] ?? throw new ConfigurationException('Repository name is missing'),
+            currentBranch: $env['INPUT_BRANCH'] ?? null,
+            currentTag: $env['INPUT_TAG'] ?? null,
+            gitUserName: $env['INPUT_USER_EMAIL'] ?? null,
+            gitUserEmail: $env['INPUT_NAME'] ?? null,
             currentCommitHash: $env['GITHUB_SHA'] ?? throw new ConfigurationException('Commit hash is missing'),
             accessToken: $accessToken
         );
