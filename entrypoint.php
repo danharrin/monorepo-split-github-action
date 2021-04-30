@@ -56,7 +56,7 @@ exec('rm -rf ' . $cloneDirectory);
 // make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
 $copyMessage = sprintf('Copying contents to git repo of "%s" branch', $config->getCommitHash());
 note($copyMessage);
-$commandLine = sprintf('cp -ra %s %s', $config->getLocalDirectory() . '/.', $buildDirectory);
+$commandLine = sprintf('cp -ra %s %s', $config->getPackageDirectory() . '/.', $buildDirectory);
 exec($commandLine);
 
 note('Files that will be pushed');
@@ -160,11 +160,11 @@ function exec_with_output_print(string $commandLine): void
 
 function setupGitCredentials(Config $config): void
 {
-    if ($config->getGitUserName()) {
-        exec('git config --global user.name ' . $config->getGitUserName());
+    if ($config->getUserName()) {
+        exec('git config --global user.name ' . $config->getUserName());
     }
 
-    if ($config->getGitUserEmail()) {
-        exec('git config --global user.email ' . $config->getGitUserEmail());
+    if ($config->getUserEmail()) {
+        exec('git config --global user.email ' . $config->getUserEmail());
     }
 }

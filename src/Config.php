@@ -9,47 +9,32 @@ namespace Symplify\MonorepoSplit;
 final class Config
 {
     public function __construct(
-        private string $localDirectory,
-        private string $splitRepositoryHost,
-        private string $splitRepositoryOrganiation,
-        private string $splitRepositoryName,
+        private string $packageDirectory,
+        private string $repositoryHost,
+        private string $repositoryOrganization,
+        private string $repositoryName,
         private string $commitHash,
         private string $branch,
         private ?string $tag,
-        private ?string $gitUserName,
-        private ?string $gitUserEmail,
+        private ?string $userName,
+        private ?string $userEmail,
         private string $accessToken
     ) {
     }
 
-    public function getLocalDirectory(): string
+    public function getPackageDirectory(): string
     {
-        return $this->localDirectory;
+        return $this->packageDirectory;
     }
 
-    public function getSplitRepositoryHost(): string
+    public function getUserName(): ?string
     {
-        return $this->splitRepositoryHost;
+        return $this->userName;
     }
 
-    public function getSplitRepositoryOrganiation(): string
+    public function getUserEmail(): ?string
     {
-        return $this->splitRepositoryOrganiation;
-    }
-
-    public function getSplitRepositoryName(): string
-    {
-        return $this->splitRepositoryName;
-    }
-
-    public function getGitUserName(): ?string
-    {
-        return $this->gitUserName;
-    }
-
-    public function getGitUserEmail(): ?string
-    {
-        return $this->gitUserEmail;
+        return $this->userEmail;
     }
 
     public function getBranch(): ?string
@@ -74,6 +59,6 @@ final class Config
 
     public function getGitRepository(): string
     {
-        return $this->splitRepositoryHost . '/' . $this->splitRepositoryOrganiation . '/' . $this->splitRepositoryName . '.git';
+        return $this->repositoryHost . '/' . $this->repositoryOrganization . '/' . $this->repositoryName . '.git';
     }
 }

@@ -8,14 +8,14 @@ inputs:
     package_directory:
         description: 'Local package directory'
         required: true
-    split_repository_host:
+    repository_host:
         description: 'Host'
         default: 'github.com'
         required: false
-    split_repository_organization:
+    repository_organization:
         description: 'Remote organization'
         required: true
-    split_repository_name:
+    repository_name:
         description: 'Remote repository'
         required: true
     branch:
@@ -38,13 +38,13 @@ runs:
     args:
         # "GitHub stores input parameters as environment variables" - important!!!
         - ${{ inputs.package_directory }} # => INPUT_PACKAGE_DIRECTORY
-        - ${{ inputs.split_repository_organization }}
-        - ${{ inputs.split_repository_name }}
+        - ${{ inputs.repository_host }}
+        - ${{ inputs.repository_organization }}
+        - ${{ inputs.repository_name }}
         - ${{ inputs.branch }}
         - ${{ inputs.tag }}
         - ${{ inputs.user_email }}
         - ${{ inputs.user_name }}
-        - ${{ inputs.split_repository_host }}
 
 branding:
     icon: maximize-2
