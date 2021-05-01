@@ -1,74 +1,37 @@
 <?php
 
-// uses PHP 8.0
-
 declare(strict_types=1);
 
-require __DIR__ . '/src/PublicAccessTokenResolver.php';
+use Symplify\MonorepoSplit\Config;
+use Symplify\MonorepoSplit\ConfigFactory;
+use Symplify\MonorepoSplit\Exception\ConfigurationException;
 
-// 1. using GitHub
-$platform = getenv('GITLAB_CI') !== false ? 'GITLAB' : 'GITHUB';
+require_once __DIR__ . '/src/autoload.php';
 
-# @todo use classes for better API
+note('Resolving configuration...');
 
-if ($platform === 'GITHUB') {
-    if ($argc <= 8) {
-        note(sprintf('Not enough arguments supplied. Exactly 8 required, but only %d given', $argc - 1));
-        exit(0);
-    } else {
-        note('Starting...');
-    }
-
-    // set variables from command line arguments
-    $packageDirectory = $argv[1];
-    $splitRepositoryOrganization = $argv[2];
-    $splitRepositoryName = $argv[3];
-    $branch = $argv[4];
-    $tag = $argv[5];
-    $userEmail = $argv[6];
-    $userName = $argv[7];
-    $splitRepositoryHost = $argv[8];
-
-    $currentCommitHash = getenv('GITHUB_SHA');
-} else {
-    // 2. gitlab - make use of env variables
-    $packageDirectory = getenv('PACKAGE_DIRECTORY');
-    $branch = getenv('BRANCH') ?? 'main';
-    $tag = getenv('TAG') ?? null;
-    $userName = getenv('USER_NAME');
-    $userEmail = getenv('USER_EMAIL');
-
-    $splitRepositoryHost = getenv('SPLIT_REPOSITORY_HOST') ?? 'gitlab.com';
-    $splitRepositoryOrganization = getenv('SPLIT_REPOSITORY_ORGANIZATION');
-    $splitRepositoryName = getenv('SPLIT_REPOSITORY');
+$configFactory = new ConfigFactory();
+try {
+    $config = $configFactory->create(getenv());
+} catch (ConfigurationException $configurationException) {
+    error($configurationException->getMessage());
+    exit(0);
 }
 
-
-// setup access token to push repository (GitHub or Gitlab supported)
-$publicAccessTokenResolver = new PublicAccessTokenResolver();
-$publicAccessTokens = $publicAccessTokenResolver->resolve();
-
-
-// setup git user + email
-if ($userName) {
-    exec('git config --global user.name ' . $userName);
-}
-
-if ($userEmail) {
-    exec('git config --global user.email ' . $userEmail);
-}
+setupGitCredentials($config);
 
 
 $cloneDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory';
 $buildDirectory = sys_get_temp_dir() . '/monorepo_split/build_directory';
 
-$hostRepositoryOrganizationName = $splitRepositoryHost. '/' . $splitRepositoryOrganization . '/' . $splitRepositoryName . '.git';
+$hostRepositoryOrganizationName = $config->getGitRepository();
 
 // info
 $clonedRepository='https://' . $hostRepositoryOrganizationName;
-note(sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory));
+$cloningMessage = sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory);
+note($cloningMessage);
 
-$commandLine = 'git clone -- https://' . $publicAccessTokens . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
+$commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
 exec_with_note($commandLine);
 
 
@@ -91,8 +54,9 @@ exec('rm -rf ' . $cloneDirectory);
 
 // copy the package directory including all hidden files to the clone dir
 // make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
-note("Copying contents to git repo of '$branch' branch");
-$commandLine = sprintf('cp -ra %s %s', $packageDirectory . '/.', $buildDirectory);
+$copyMessage = sprintf('Copying contents to git repo of "%s" branch', $config->getCommitHash());
+note($copyMessage);
+$commandLine = sprintf('cp -ra %s %s', $config->getPackageDirectory() . '/.', $buildDirectory);
 exec($commandLine);
 
 note('Files that will be pushed');
@@ -101,12 +65,14 @@ list_directory_files($buildDirectory);
 
 // WARNING! this function happen before we change directory
 // if we do this in split repository, the original hash is missing there and it will fail
-$commitMessage = createCommitMessage($currentCommitHash);
+$commitMessage = createCommitMessage($config->getCommitHash());
 
 
 $formerWorkingDirectory = getcwd();
 chdir($buildDirectory);
-note(sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory));
+
+$restoreChdirMessage = sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory);
+note($restoreChdirMessage);
 
 
 
@@ -123,31 +89,32 @@ if ($hasChangedFiles === 1) {
     note('Adding git commit');
     exec_with_output_print('git add .');
 
-    $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $branch);
+    $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
     note($message);
 
     exec("git commit --message '$commitMessage'");
-    exec('git push --quiet origin ' . $branch);
+    exec('git push --quiet origin ' . $config->getBranch());
 } else {
     note('No files to change');
 }
 
 
 // push tag if present
-if ($tag) {
-    $message = sprintf('Publishing "%s"', $tag);
+if ($config->getTag()) {
+    $message = sprintf('Publishing "%s"', $config->getTag());
     note($message);
 
-    $commandLine = sprintf('git tag %s -m "%s"', $tag, $message);
+    $commandLine = sprintf('git tag %s -m "%s"', $config->getTag(), $message);
     exec_with_note($commandLine);
 
-    exec_with_note('git push --quiet origin ' . $tag);
+    exec_with_note('git push --quiet origin ' . $config->getTag());
 }
 
 
 // restore original directory to avoid nesting WTFs
 chdir($formerWorkingDirectory);
-note(sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory));
+$chdirMessage = sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory);
+note($chdirMessage);
 
 
 function createCommitMessage(string $commitSha): string
@@ -157,15 +124,20 @@ function createCommitMessage(string $commitSha): string
 }
 
 
-function note(string $message)
+function note(string $message): void
 {
     echo PHP_EOL . PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
+}
+
+function error(string $message): void
+{
+    echo PHP_EOL . PHP_EOL . "\033[0;31m[ERROR] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
 }
 
 
 
 
-function list_directory_files(string $directory) {
+function list_directory_files(string $directory): void {
     exec_with_output_print('ls -la ' . $directory);
 }
 
@@ -183,4 +155,16 @@ function exec_with_output_print(string $commandLine): void
 {
     exec($commandLine, $outputLines);
     echo implode(PHP_EOL, $outputLines);
+}
+
+
+function setupGitCredentials(Config $config): void
+{
+    if ($config->getUserName()) {
+        exec('git config --global user.name ' . $config->getUserName());
+    }
+
+    if ($config->getUserEmail()) {
+        exec('git config --global user.email ' . $config->getUserEmail());
+    }
 }

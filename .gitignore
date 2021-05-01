@@ -2,3 +2,8 @@
 clone_directory
 target_dir
 build_directory
+
+
+# only for testing PHP code
+/vendor
+composer.lock
