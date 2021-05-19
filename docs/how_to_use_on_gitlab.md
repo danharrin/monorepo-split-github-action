@@ -42,7 +42,7 @@ split_monorepo:
         USER_EMAIL: "info@kaizen-ci.org"
         REPOSITORY_HOST: "git.yourhost.com"
     script:
-        - echo "Splitting $PACKAGE_DIRECTORY to $SPLIT_REPOSITORY_NAME"
+        - echo "Splitting $PACKAGE_DIRECTORY to $REPOSITORY_NAME"
         - php /splitter/entrypoint.php
     when: always
 ```
