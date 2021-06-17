@@ -79,13 +79,13 @@ note($restoreChdirMessage);
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec_with_output_print('git status');
 
-exec('git diff-index --quiet HEAD', $outputLines, $hasChangedFiles);
+// "status --porcelain" retrieves all modified files, no matter if they are newly created or not,
+// when "diff-index --quiet HEAD" only checks files that were already present in the project.
+exec('git status --porcelain', $changedFiles);
 
+// $changedFiles is an array that contains the list of modified files, and is empty if there are no changes.
 
-// 1 = changed files
-// 0 = no changed files
-
-if ($hasChangedFiles === 1) {
+if ($changedFiles) {
     note('Adding git commit');
     exec_with_output_print('git add .');
 
