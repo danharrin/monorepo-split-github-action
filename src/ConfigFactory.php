@@ -73,8 +73,8 @@ final class ConfigFactory
             // optional
             branch: $env[$envPrefix . 'BRANCH'] ?? null,
             tag: $env[$envPrefix . 'TAG'] ?? null,
-            userName: $env[$envPrefix . 'USER_EMAIL'] ?? null,
-            userEmail: $env[$envPrefix . 'USER_NAME'] ?? null,
+            userName: $env[$envPrefix . 'USER_NAME'] ?? null,
+            userEmail: $env[$envPrefix . 'USER_EMAIL'] ?? null,
             // required
             commitHash: $commitHash,
             accessToken: $accessToken
