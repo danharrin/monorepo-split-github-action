@@ -72,40 +72,40 @@ jobs:
             # no tag
             -
                 if: "!startsWith(github.ref, 'refs/tags/')"
-                uses: "symplify/monorepo-split-github-action@2.0"
+                uses: "symplify/monorepo-split-github-action@2.1"
                 with:
                     # ↓ split "packages/easy-coding-standard" directory
-                    package-directory: 'packages/${{ matrix.package.local_path }}'
+                    package_directory: 'packages/${{ matrix.package.local_path }}'
 
                     # ↓ into https://github.com/symplify/easy-coding-standard repository
-                    split-repository-organization: 'symplify'
-                    split-repository-name: '${{ matrix.package.split_repository }}'
+                    repository_organization: 'symplify'
+                    repository_name: '${{ matrix.package.split_repository }}'
 
                     # [optional, with "github.com" as default]
-                    split-repository-host: git.private.com:1234
+                    repository_host: git.private.com:1234
 
                     # ↓ the user signed under the split commit
-                    user-name: "kaizen-ci"
-                    user-email: "info@kaizen-ci.org"
+                    user_name: "kaizen-ci"
+                    user_email: "info@kaizen-ci.org"
 
             # with tag
             -
                 if: "startsWith(github.ref, 'refs/tags/')"
-                uses: "symplify/monorepo-split-github-action@2.0"
+                uses: "symplify/monorepo-split-github-action@2.1"
                 with:
                     tag: ${GITHUB_REF#refs/tags/}
 
                     # ↓ split "packages/easy-coding-standard" directory
-                    package-directory: 'packages/${{ matrix.package.local_path }}'
+                    package_directory: 'packages/${{ matrix.package.local_path }}'
 
                     # ↓ into https://github.com/symplify/easy-coding-standard repository
-                    split-repository-organization: 'symplify'
-                    split-repository-name: '${{ matrix.package.split_repository }}'
+                    repository_organization: 'symplify'
+                    repository_name: '${{ matrix.package.split_repository }}'
 
                     # [optional, with "github.com" as default]
-                    split-repository-host: git.private.com:1234
+                    repository_host: git.private.com:1234
 
                     # ↓ the user signed under the split commit
-                    user-name: "kaizen-ci"
-                    user-email: "info@kaizen-ci.org"
+                    user_name: "kaizen-ci"
+                    user_email: "info@kaizen-ci.org"
 ```
