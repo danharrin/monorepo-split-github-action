@@ -93,7 +93,10 @@ if ($changedFiles) {
     note($message);
 
     exec("git commit --message '$commitMessage'");
-    exec('git push --quiet origin ' . $config->getBranch());
+    $result = exec('git push --quiet origin ' . $config->getBranch());
+    if ($result === false) {
+        die('Command failed');
+    }
 } else {
     note('No files to change');
 }
