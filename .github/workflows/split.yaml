@@ -30,9 +30,11 @@ jobs:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
                     package_directory: 'tests/packages/some-package'
-                    repository_organization: 'symplify'
+                    repository_organization: 'hexxore'
                     repository_name: 'monorepo-split-github-action-test'
 
                     # change to use that should be signed under the split commit
-                    user_name: 'kaizen-ci'
-                    user_email: 'info@kaizen-ci.org'
+                    user_name: 'Wuffz'
+                    user_email: 'proozeboom91@gmail.com'
+
+                    init_new_repositories: true

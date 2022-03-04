@@ -18,7 +18,8 @@ final class Config
         private ?string $tag,
         private ?string $userName,
         private ?string $userEmail,
-        private string $accessToken
+        private string $accessToken,
+        private bool $initNewRepositories,
     ) {
     }
 
@@ -55,6 +56,10 @@ final class Config
     public function getAccessToken(): string
     {
         return $this->accessToken;
+    }
+    public function getInitNewRepository(): bool
+    {
+        return $this->initNewRepositories;
     }
 
     public function getGitRepository(): string

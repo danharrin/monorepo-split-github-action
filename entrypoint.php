@@ -23,6 +23,7 @@ setupGitCredentials($config);
 
 $cloneDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory';
 $buildDirectory = sys_get_temp_dir() . '/monorepo_split/build_directory';
+$dotGitDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory/.git';
 
 $hostRepositoryOrganizationName = $config->getGitRepository();
 
@@ -40,7 +41,7 @@ note('Cleaning destination repository of old files');
 mkdir($buildDirectory . '/.git', 0777, true);
 
 $copyGitDirectoryCommandLine = sprintf('cp -r %s %s', $cloneDirectory . '/.git', $buildDirectory);
-exec($copyGitDirectoryCommandLine, $outputLines, $exitCode);
+exec_with_note($copyGitDirectoryCommandLine, $outputLines, $exitCode);
 
 if ($exitCode === 1) {
     die('Command failed');
@@ -48,7 +49,7 @@ if ($exitCode === 1) {
 
 
 // cleanup old unused data to avoid pushing them
-exec('rm -rf ' . $cloneDirectory);
+exec_with_note('rm -rf ' . $cloneDirectory);
 // exec('rm -rf .git');
 
 
@@ -57,7 +58,15 @@ exec('rm -rf ' . $cloneDirectory);
 $copyMessage = sprintf('Copying contents to git repo of "%s" branch', $config->getCommitHash());
 note($copyMessage);
 $commandLine = sprintf('cp -ra %s %s', $config->getPackageDirectory() . '/.', $buildDirectory);
-exec($commandLine);
+exec_with_note($commandLine);
+
+
+// Do some checking if we should init the new repository here or not.
+// based on the remote origin within the current git tree we can determine if there is a repository present.
+
+note('This is a debugging test, to see wat the remote origin looks like from a runner point of view.')
+exec_with_output_print('git remote get-url origin');
+
 
 note('Files that will be pushed');
 list_directory_files($buildDirectory);

@@ -75,6 +75,7 @@ final class ConfigFactory
             tag: $env[$envPrefix . 'TAG'] ?? null,
             userName: $env[$envPrefix . 'USER_NAME'] ?? null,
             userEmail: $env[$envPrefix . 'USER_EMAIL'] ?? null,
+            initNewRepositories: (bool)$env[$envPrefix . 'INIT_NEW_REPOSITORIES'] ?? false,
             // required
             commitHash: $commitHash,
             accessToken: $accessToken
