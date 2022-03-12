@@ -31,6 +31,10 @@ inputs:
     user_name:
         description: 'Git User Name'
         required: true
+    auto_create_repo:
+        description: 'Automatically create package repository'
+        required: false
+        default: false
 
 runs:
     using: 'docker'
@@ -45,6 +49,7 @@ runs:
         - ${{ inputs.tag }}
         - ${{ inputs.user_email }}
         - ${{ inputs.user_name }}
+        - ${{ inputs.auto_create_repo }}
 
 branding:
     icon: maximize-2

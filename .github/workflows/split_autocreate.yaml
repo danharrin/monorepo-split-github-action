@@ -1,0 +1,41 @@
+name: Split Test
+
+on:
+    push:
+        branches:
+            - main
+        tags:
+            - '*'
+            
+    pull_request: null
+
+    release:
+        types: [created]
+
+jobs:
+    split_test_with_auto_create:
+        runs-on: ubuntu-latest
+
+        steps:
+            -
+                uses: actions/checkout@v2
+
+            -
+                # run action.yaml in the root directory
+                # see https://github.community/t/self-reference-an-action-for-testing/17891
+                uses: "./"
+                env:
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                with:
+                    package_directory: 'tests/packages/some-package'
+                    repository_organization: 'symplify'
+
+                    # change to use that should be signed under the split commit
+                    user_name: 'kaizen-ci'
+                    user_email: 'info@kaizen-ci.org'
+
+                    # turn on auto create repo
+                    auto_create_repo: true
+
+                    # use the commit hash in the name, for making sure it doesn't exist.
+                    repository_name: 'monorepo-split-github-action-test-${{ github.sha }}'

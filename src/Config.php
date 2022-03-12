@@ -18,6 +18,7 @@ final class Config
         private ?string $tag,
         private ?string $userName,
         private ?string $userEmail,
+        private bool $autoCreateRepo,
         private string $accessToken
     ) {
     }
@@ -35,6 +36,11 @@ final class Config
     public function getUserEmail(): ?string
     {
         return $this->userEmail;
+    }
+
+    public function getAutoCreateRepo(): bool
+    {
+        return $this->autoCreateRepo;
     }
 
     public function getBranch(): ?string
@@ -60,5 +66,13 @@ final class Config
     public function getGitRepository(): string
     {
         return $this->repositoryHost . '/' . $this->repositoryOrganization . '/' . $this->repositoryName . '.git';
+    }
+    public function getPackageName(): string 
+    {
+        return $this->repositoryName;
+    }
+    public function getOrganization(): string 
+    {
+        return $this->repositoryOrganization;
     }
 }

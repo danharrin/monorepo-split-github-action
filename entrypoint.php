@@ -5,6 +5,9 @@ declare(strict_types=1);
 use Symplify\MonorepoSplit\Config;
 use Symplify\MonorepoSplit\ConfigFactory;
 use Symplify\MonorepoSplit\Exception\ConfigurationException;
+use Symplify\MonorepoSplit\Github;
+use Symplify\MonorepoSplit\GithubException;
+
 
 require_once __DIR__ . '/src/autoload.php';
 
@@ -33,6 +36,117 @@ note($cloningMessage);
 
 $commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
 exec_with_note($commandLine);
+
+note("Checking existence of " . $cloneDirectory . "/.git");
+
+if ( !is_dir($cloneDirectory . "/.git")) {
+    error($cloneDirectory . "/.git does not exist"); 
+    // should we exit 1 here? for backwards compatibility lets leave this just here.
+    
+    // entering new behaviours.
+    if ( $config->getAutoCreateRepo() ) { 
+
+        // Github specific behaviour
+        if ( strpos($hostRepositoryOrganizationName,"github.com") !== false ) {
+            
+            note("Automatically creating repo on github");
+
+
+            /*
+             * Do some github specific actions to create the repository within the github user or organization account.
+             * 
+             */
+            Github::useAuth($config->getUsername(), $config->getAccessToken());
+
+            // extract the working repository url;
+            exec('git remote get-url --push origin | head -n 1', $remote);
+            $origremote = trim(implode(PHP_EOL, $remote));
+
+            if ( strpos($origremote, "git@") !== false) {
+                // current repo uses SSH, reformat that to http url for easy extaction.
+                $origremote = str_replace("git@","https://",$origremote);
+                $origremote = str_replace(".com:",".com/", $origremote);
+            }
+
+            // get the username/path part from main upstream repo which wil be split.
+            $remotepath = ltrim(parse_url($origremote, PHP_URL_PATH),"/");
+            $remotepath = str_replace(".git","",$remotepath);
+            
+            list($parentlogin, $parentrepo) = explode("/",$remotepath);
+
+            // gets the parent repository from github.
+            $parentinfo = Github::getRepo($remotepath);
+            $private = $parentinfo->private;
+
+            
+            $childlogin = $config->getOrganization();
+            $childrepo = $config->getPackageName();
+
+            try {
+                $entity = Github::getUser($childlogin);
+            } catch(\GithubException $e ) {
+                $entity = Github::getOrganization($childlogin);
+            }
+
+            if ($entity && $entity->type == "User" ) {
+                $offspringurl = "/user/repos";
+            }
+
+            if ($entity && $entity->type == "Organization" ) {
+                $offspringurl = "/orgs/{$childlogin}/repos";
+            }
+
+            note("Splitting $parentlogin/$parentrepo into $childlogin/$childrepo ( post target: $offspringurl )");
+            $payload = [
+                'name' => $childrepo,
+                'description' => '[READ ONLY] ' . $childlogin . '/' . $childrepo . ' package ( splitted from ' . $parentlogin . '/' . $parentrepo . ' )',
+                'private' => $private,
+                'homepage' => 'https://github.com/' . $parentlogin . '/' . $parentrepo,
+            ];            
+
+            try {
+                Github::createRepo(
+                    path: $offspringurl,
+                    payload: $payload
+                );
+            } catch ( GithubException $e ) {
+                // coudn't create repo, so dont continue;
+                error($e->getMessage());
+                exit(1);
+            }
+
+            /*
+             * Initiate a new git repository to build to
+             */
+
+            $formerWorkingDirectory = getcwd();
+            mkdir($cloneDirectory);
+            chdir($cloneDirectory);
+
+            exec_with_output_print('echo "# ' . $childlogin . "/" . $childrepo . '" >> README.md');
+            exec_with_output_print('git init --initial-branch=main');
+            exec_with_output_print('git add README.md');
+            exec_with_output_print('git commit -m "first commit"');
+            exec_with_output_print('git remote add origin https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName );
+            exec_with_output_print('git push -u origin main');
+            
+            // make sure we are working in the right branch
+            exec_with_output_print('git checkout -b '.$config->getBranch());
+            
+            chdir($formerWorkingDirectory);
+            
+
+
+        } else {
+            note("Current host is currently not supported for auto creating repositories");
+        }
+
+    } else {
+        note("Automatically creating repo was not enabled");
+    }
+
+} 
+
 
 
 note('Cleaning destination repository of old files');
@@ -108,6 +222,7 @@ if ($config->getTag()) {
     exec_with_note($commandLine);
 
     exec_with_note('git push --quiet origin ' . $config->getTag());
+    
 }
 
 
@@ -154,7 +269,7 @@ function exec_with_note(string $commandLine): void
 function exec_with_output_print(string $commandLine): void
 {
     exec($commandLine, $outputLines);
-    echo implode(PHP_EOL, $outputLines);
+    echo implode(PHP_EOL, $outputLines).PHP_EOL;
 }
 
 

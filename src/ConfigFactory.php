@@ -75,9 +75,10 @@ final class ConfigFactory
             tag: $env[$envPrefix . 'TAG'] ?? null,
             userName: $env[$envPrefix . 'USER_NAME'] ?? null,
             userEmail: $env[$envPrefix . 'USER_EMAIL'] ?? null,
+            autoCreateRepo: ( ( $env[$envPrefix . 'AUTO_CREATE_REPO'] ?? "false" ) === "true" ),
             // required
             commitHash: $commitHash,
-            accessToken: $accessToken
+            accessToken: $accessToken,
         );
     }
 

@@ -7,3 +7,7 @@ build_directory
 # only for testing PHP code
 /vendor
 composer.lock
+
+# Please copy the .env.example 
+# fill in the blanks for your own usage
+.env
