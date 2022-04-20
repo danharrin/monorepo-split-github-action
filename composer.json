@@ -3,7 +3,7 @@
     "license": "MIT",
     "description": "GitHub Action for splitting monorepo. Composer is for testing PHP code only, not for package shipment",
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "phpstan/extension-installer": "^1.1"
     },
     "require-dev": {

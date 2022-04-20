@@ -9,16 +9,16 @@ namespace Symplify\MonorepoSplit;
 final class Config
 {
     public function __construct(
-        private string $packageDirectory,
-        private string $repositoryHost,
-        private string $repositoryOrganization,
-        private string $repositoryName,
-        private string $commitHash,
-        private string $branch,
-        private ?string $tag,
-        private ?string $userName,
-        private ?string $userEmail,
-        private string $accessToken
+        private readonly string $packageDirectory,
+        private readonly string $repositoryHost,
+        private readonly string $repositoryOrganization,
+        private readonly string $repositoryName,
+        private readonly string $commitHash,
+        private readonly string $branch,
+        private readonly ?string $tag,
+        private readonly ?string $userName,
+        private readonly ?string $userEmail,
+        private readonly string $accessToken
     ) {
     }
 

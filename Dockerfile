@@ -1,5 +1,5 @@
 # THIS IS BASE IMAGE
-FROM php:8.0-cli
+FROM php:8.1-cli
 
 RUN apt-get update -y
 RUN apt-get install git -y
