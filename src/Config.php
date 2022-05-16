@@ -39,6 +39,12 @@ final class Config
 
     public function getBranch(): ?string
     {
+        // we need branches only for minor and major versions
+        $versionParts = \explode('.', $this->branch);
+        if (isset($versionParts[0]) && isset($versionParts[1]) && \count($versionParts) === 3) {
+            return $versionParts[0] . '.' . $versionParts[1];
+        }
+
         return $this->branch;
     }
 

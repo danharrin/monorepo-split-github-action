@@ -74,7 +74,7 @@ chdir($buildDirectory);
 $restoreChdirMessage = sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory);
 note($restoreChdirMessage);
 
-
+exec_with_note('git checkout -B ' . $config->getBranch());
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec_with_output_print('git status');
@@ -92,7 +92,6 @@ if ($changedFiles) {
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
     note($message);
 
-    exec_with_note('git checkout -B ' . $config->getBranch());
     exec_with_note("git commit --message '$commitMessage'");
     exec_with_note('git push --quiet origin ' . $config->getBranch());
 } else {
