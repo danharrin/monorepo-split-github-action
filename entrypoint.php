@@ -33,7 +33,6 @@ note($cloningMessage);
 
 $commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
 exec_with_note($commandLine);
-exec_with_note('git checkout -B ' . $config->getBranch());
 
 note('Cleaning destination repository of old files');
 // We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
@@ -74,6 +73,8 @@ chdir($buildDirectory);
 $restoreChdirMessage = sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory);
 note($restoreChdirMessage);
 
+exec_with_note('git checkout -B ' . $config->getBranch());
+
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec_with_output_print('git status');
 
@@ -91,6 +92,7 @@ if ($changedFiles) {
     note($message);
 
     exec_with_note("git commit --message '$commitMessage'");
+    exec_with_note('git pull');
     exec_with_note('git push --quiet origin ' . $config->getBranch());
 } else {
     note('No files to change');
@@ -105,6 +107,7 @@ if ($config->getTag()) {
     $commandLine = sprintf('git tag %s -m "%s"', $config->getTag(), $message);
     exec_with_note($commandLine);
 
+    exec_with_note('git pull');
     exec_with_note('git push --quiet origin ' . $config->getTag());
 }
 
