@@ -92,8 +92,7 @@ if ($changedFiles) {
     note($message);
 
     exec_with_note("git commit --message '$commitMessage'");
-    exec_with_note('git pull origin ' . $config->getBranch());
-    exec_with_note('git push --quiet origin ' . $config->getBranch());
+    exec_with_note('git push -f --quiet origin ' . $config->getBranch());
 } else {
     note('No files to change');
 }
@@ -107,8 +106,7 @@ if ($config->getTag()) {
     $commandLine = sprintf('git tag %s -m "%s"', $config->getTag(), $message);
     exec_with_note($commandLine);
 
-    exec_with_note('git pull origin ' . $config->getBranch());
-    exec_with_note('git push --quiet origin ' . $config->getTag());
+    exec_with_note('git push -f --quiet origin ' . $config->getTag());
 }
 
 
