@@ -92,9 +92,9 @@ if ($changedFiles) {
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
     note($message);
 
-    exec('git checkout -B ' . $config->getBranch());
-    exec("git commit --message '$commitMessage'");
-    exec('git push --quiet origin ' . $config->getBranch());
+    exec_with_note('git checkout -B ' . $config->getBranch());
+    exec_with_note("git commit --message '$commitMessage'");
+    exec_with_note('git push --quiet origin ' . $config->getBranch());
 } else {
     note('No files to change');
 }
