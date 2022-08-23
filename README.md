@@ -71,7 +71,7 @@ jobs:
 
             # no tag
             -
-                if: "!startsWith(github.ref, 'refs/tags/')"
+                if: "${{ github.ref_type != 'tag' }}"
                 uses: "symplify/monorepo-split-github-action@2.1"
                 with:
                     # ↓ split "packages/easy-coding-standard" directory
@@ -90,7 +90,7 @@ jobs:
 
             # with tag
             -
-                if: "startsWith(github.ref, 'refs/tags/')"
+                if: "${{ github.ref_type == 'tag' }}"
                 uses: "symplify/monorepo-split-github-action@2.1"
                 with:
                     tag: ${GITHUB_REF#refs/tags/}
