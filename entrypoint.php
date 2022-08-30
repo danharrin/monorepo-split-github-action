@@ -77,7 +77,7 @@ note($restoreChdirMessage);
 
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
-exec_with_output_print('git status');
+exec_with_output_print('git status --porcelain');
 
 // "status --porcelain" retrieves all modified files, no matter if they are newly created or not,
 // when "diff-index --quiet HEAD" only checks files that were already present in the project.
