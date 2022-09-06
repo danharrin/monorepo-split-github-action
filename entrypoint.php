@@ -79,6 +79,19 @@ note($restoreChdirMessage);
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
 exec_with_output_print('git status');
 
+// if the given branch doesn't exist it returns empty string
+$targetBranchExists = "" !== exec('git branch --list ' . $config->getBranch());
+
+if (!$targetBranchExists) {
+    note(sprintf('Creating branch "%s"', $config->getBranch()));
+
+    exec_with_output_print(sprintf('git checkout -b %s', $config->getBranch()));
+}
+
+note(sprintf('Switching to branch %s', $config->getBranch()));
+
+exec_with_output_print(sprintf('git checkout %s', $config->getBranch()));
+
 // "status --porcelain" retrieves all modified files, no matter if they are newly created or not,
 // when "diff-index --quiet HEAD" only checks files that were already present in the project.
 exec('git status --porcelain', $changedFiles);
@@ -87,6 +100,7 @@ exec('git status --porcelain', $changedFiles);
 
 if ($changedFiles) {
     note('Adding git commit');
+
     exec_with_output_print('git add .');
 
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
