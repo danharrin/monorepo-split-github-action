@@ -18,17 +18,6 @@ final class ConfigFactory
      */
     private const GITHUB = 'GITHUB';
 
-    /**
-     * @var string
-     */
-    private const DEFAULT_BRANCH = 'main';
-
-    /**
-     * @todo verify
-     * @var string
-     */
-    private const DEFAULT_GITLAB_HOST = 'gitlab.com';
-
     private PublicAccessTokenResolver $publicAccessTokenResolver;
 
     public function __construct()

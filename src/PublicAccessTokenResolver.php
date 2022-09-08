@@ -33,7 +33,7 @@ final class PublicAccessTokenResolver
     ];
 
     /**
-     * @param array<string, mixed> $env
+     * @param array<string, string> $env
      */
     public function resolve(array $env): string
     {
