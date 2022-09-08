@@ -27,7 +27,7 @@ $buildDirectory = sys_get_temp_dir() . '/monorepo_split/build_directory';
 $hostRepositoryOrganizationName = $config->getGitRepository();
 
 // info
-$clonedRepository='https://' . $hostRepositoryOrganizationName;
+$clonedRepository = 'https://' . $hostRepositoryOrganizationName;
 $cloningMessage = sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory);
 note($cloningMessage);
 
@@ -43,11 +43,11 @@ exec_with_output_print('git fetch');
 note(sprintf('Trying to checkout %s branch', $config->getBranch()));
 
 // if the given branch doesn't exist it returns empty string
-$branchSwitchedSuccessfully = "" !== exec(sprintf('git checkout %s', $config->getBranch()));
+$branchSwitchedSuccessfully = exec(sprintf('git checkout %s', $config->getBranch())) !== '';
 
 // if the branch doesn't exist we creat it and push to origin
 // otherwise we just checkout to the given branch
-if (!$branchSwitchedSuccessfully) {
+if (! $branchSwitchedSuccessfully) {
     note(sprintf('Creating branch "%s" as it doesn\'t exist', $config->getBranch()));
 
     exec_with_output_print(sprintf('git checkout -b %s', $config->getBranch()));
@@ -114,7 +114,7 @@ if ($changedFiles) {
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
     note($message);
 
-    exec("git commit --message '$commitMessage'");
+    exec("git commit --message '{$commitMessage}'");
     exec('git push --quiet origin ' . $config->getBranch());
 } else {
     note('No files to change');
@@ -141,7 +141,7 @@ note($chdirMessage);
 
 function createCommitMessage(string $commitSha): string
 {
-    exec("git show -s --format=%B $commitSha", $outputLines);
+    exec("git show -s --format=%B {$commitSha}", $outputLines);
     return $outputLines[0] ?? '';
 }
 
@@ -159,7 +159,8 @@ function error(string $message): void
 
 
 
-function list_directory_files(string $directory): void {
+function list_directory_files(string $directory): void
+{
     exec_with_output_print('ls -la ' . $directory);
 }
 

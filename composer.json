@@ -9,7 +9,8 @@
         "phpstan/phpstan": "^1.8.5",
         "phpstan/extension-installer": "^1.1",
         "symplify/phpstan-extensions": "^11.1",
-        "symplify/phpstan-rules": "^11.1"
+        "symplify/phpstan-rules": "^11.1",
+        "symplify/easy-coding-standard": "^11.1"
     },
     "autoload-dev": {
         "files": [
@@ -17,7 +18,9 @@
         ]
     },
     "scripts": {
-        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify"
+        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+        "check-cs": "vendor/bin/ecs check --ansi",
+        "fix-cs": "vendor/bin/ecs check --fix --ansi"
     },
     "config": {
         "allow-plugins": {
