@@ -16,6 +16,10 @@ jobs:
                         name: 'PHPStan'
                         run: composer phpstan
 
+                    -
+                        name: 'Coding Standard'
+                        run: composer check-cs
+
         runs-on: ubuntu-latest
 
         name: ${{ matrix.actions.name }}
