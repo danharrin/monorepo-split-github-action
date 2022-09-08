@@ -34,6 +34,27 @@ note($cloningMessage);
 $commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
 exec_with_note($commandLine);
 
+$baseDir = getcwd();
+
+chdir($cloneDirectory);
+
+exec_with_output_print('git fetch');
+
+note(sprintf('Trying to checkout %s branch', $config->getBranch()));
+
+// if the given branch doesn't exist it returns empty string
+$branchSwitchedSuccessfully = "" !== exec(sprintf('git checkout %s', $config->getBranch()));
+
+// if the branch doesn't exist we creat it and push to origin
+// otherwise we just checkout to the given branch
+if (!$branchSwitchedSuccessfully) {
+    note(sprintf('Creating branch "%s" as it doesn\'t exist', $config->getBranch()));
+
+    exec_with_output_print(sprintf('git checkout -b %s', $config->getBranch()));
+    exec_with_output_print(sprintf('git push --quiet origin %s', $config->getBranch()));
+}
+
+chdir($baseDir);
 
 note('Cleaning destination repository of old files');
 // We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
@@ -87,6 +108,7 @@ exec('git status --porcelain', $changedFiles);
 
 if ($changedFiles) {
     note('Adding git commit');
+
     exec_with_output_print('git add .');
 
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
