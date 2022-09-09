@@ -47,12 +47,18 @@ $branchSwitchedSuccessfully = exec(sprintf('git checkout %s', $config->getBranch
 
 // if the branch doesn't exist we creat it and push to origin
 // otherwise we just checkout to the given branch
-if (! $branchSwitchedSuccessfully) {
+if (!$branchSwitchedSuccessfully) {
     note(sprintf('Creating branch "%s" as it doesn\'t exist', $config->getBranch()));
 
     exec_with_output_print(sprintf('git checkout -b %s', $config->getBranch()));
     exec_with_output_print(sprintf('git push --quiet origin %s', $config->getBranch()));
 }
+
+// While we're in the cloned repository folder, retrieve the commit hash of the last tag,
+// and the most recent commit hash, for later use to determine if a new tag should be pushed
+$lastTag = getLatestTag();
+$latestTagCommitHash = $lastTag ? getTagCommitHash($lastTag) : '';
+$latestCommitHash = getLatestCommitHash();
 
 chdir($baseDir);
 
@@ -116,6 +122,9 @@ if ($changedFiles) {
 
     exec("git commit --message '{$commitMessage}'");
     exec('git push --quiet origin ' . $config->getBranch());
+
+    // Update last commit hash since we just pushed a new commit
+    $latestCommitHash = getLatestCommitHash();
 } else {
     note('No files to change');
 }
@@ -123,13 +132,18 @@ if ($changedFiles) {
 
 // push tag if present
 if ($config->getTag()) {
-    $message = sprintf('Publishing "%s"', $config->getTag());
-    note($message);
+    $changeBetweenLastTag = $latestCommitHash != $latestTagCommitHash;
+    if (!$changeBetweenLastTag && is_patch($config->getTag())) {
+        note('No change since last tag, skipping patch tag');
+    } else {
+        $message = sprintf('Publishing "%s"', $config->getTag());
+        note($message);
 
-    $commandLine = sprintf('git tag %s -m "%s"', $config->getTag(), $message);
-    exec_with_note($commandLine);
+        $commandLine = sprintf('git tag %s -m "%s"', $config->getTag(), $message);
+        exec_with_note($commandLine);
 
-    exec_with_note('git push --quiet origin ' . $config->getTag());
+        exec_with_note('git push --quiet origin ' . $config->getTag());
+    }
 }
 
 
@@ -190,4 +204,45 @@ function setupGitCredentials(Config $config): void
     if ($config->getUserEmail()) {
         exec('git config --global user.email ' . $config->getUserEmail());
     }
+}
+
+/********************* tag-related helper functions *********************/
+
+function is_patch($version): bool
+{
+    $version = explode('.', $version);
+    if (count($version) != 3) {
+        $version[] = 0;
+    }
+
+    if ($version[1] == 0 && $version[2] == 0) {
+        return false; // major version
+    }
+
+    if ($version[2] == 0) {
+        return false;  // minor version
+    }
+
+    return true;
+}
+
+function getLatestTag(): string
+{
+    exec('git describe --tags --abbrev=0', $outputLines);
+
+    return $outputLines[0] ?? '';
+}
+
+function getTagCommitHash(string $tag): string
+{
+    exec("git rev-list -n 1 {$tag}", $outputLines);
+
+    return $outputLines[0] ?? '';
+}
+
+function getLatestCommitHash(): string
+{
+    exec('git rev-parse HEAD', $outputLines);
+
+    return $outputLines[0] ?? '';
 }
