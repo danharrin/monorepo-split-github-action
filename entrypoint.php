@@ -47,7 +47,7 @@ $branchSwitchedSuccessfully = exec(sprintf('git checkout %s', $config->getBranch
 
 // if the branch doesn't exist we creat it and push to origin
 // otherwise we just checkout to the given branch
-if (!$branchSwitchedSuccessfully) {
+if (! $branchSwitchedSuccessfully) {
     note(sprintf('Creating branch "%s" as it doesn\'t exist', $config->getBranch()));
 
     exec_with_output_print(sprintf('git checkout -b %s', $config->getBranch()));
@@ -132,8 +132,8 @@ if ($changedFiles) {
 
 // push tag if present
 if ($config->getTag()) {
-    $changeBetweenLastTag = $latestCommitHash != $latestTagCommitHash;
-    if (!$changeBetweenLastTag && is_patch($config->getTag())) {
+    $changeBetweenLastTag = $latestCommitHash !== $latestTagCommitHash;
+    if (! $changeBetweenLastTag && is_patch($config->getTag())) {
         note('No change since last tag, skipping patch tag');
     } else {
         $message = sprintf('Publishing "%s"', $config->getTag());
@@ -208,18 +208,18 @@ function setupGitCredentials(Config $config): void
 
 /********************* tag-related helper functions *********************/
 
-function is_patch($version): bool
+function is_patch(string $version): bool
 {
     $version = explode('.', $version);
-    if (count($version) != 3) {
+    if (count($version) !== 3) {
         $version[] = 0;
     }
 
-    if ($version[1] == 0 && $version[2] == 0) {
+    if ($version[1] === '0' && $version[2] === '0') {
         return false; // major version
     }
 
-    if ($version[2] == 0) {
+    if ($version[2] === '0') {
         return false;  // minor version
     }
 
