@@ -1,8 +1,7 @@
 # THIS IS BASE IMAGE
-FROM php:8.0-cli
+FROM php:8.1-cli-alpine
 
-RUN apt-get update -y
-RUN apt-get install git -y
+RUN apk add --no-cache git
 
 # directory inside docker
 WORKDIR /splitter
