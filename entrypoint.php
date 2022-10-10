@@ -114,7 +114,7 @@ if ($changedFiles) {
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
     note($message);
 
-    exec("git commit --message '${$commitMessage}'");
+    exec("git commit --message '{$commitMessage}'");
     exec('git push --quiet origin ' . $config->getBranch(), $outputLines, $exitCode);
 
     if ($exitCode > 0) {
