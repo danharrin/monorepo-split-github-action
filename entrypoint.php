@@ -115,12 +115,7 @@ if ($changedFiles) {
     note($message);
 
     exec("git commit --message '{$commitMessage}'");
-    exec('git push --quiet origin ' . $config->getBranch(), $outputLines, $exitCode);
-    
-    if ($exitCode > 0) {
-        fprintf(STDERR, "Failed to push!");
-        exit();
-    }
+    exec('git push --quiet origin ' . $config->getBranch());
 } else {
     note('No files to change');
 }
