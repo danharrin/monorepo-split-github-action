@@ -30,7 +30,7 @@ env:
     GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 ```
 
-Make sure to add this access token in "Secrets" of package settings: `https://github.com/<organization>/<package>/settings/secrets/actions`
+Make sure to add this access token in "Secrets" of package settings at https://github.com/<organization>/<package>/settings/environments
 
 <br>
 
