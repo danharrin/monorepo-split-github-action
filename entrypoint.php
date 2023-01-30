@@ -87,8 +87,9 @@ $commandLine = sprintf('cp -ra %s %s', $config->getPackageDirectory() . '/.', $b
 exec($commandLine);
 
 note('Files that will be pushed');
-list_directory_files($buildDirectory);
 
+list_directory_files($buildDirectory);
+setSafeDirectory($buildDirectory);
 
 // WARNING! this function happen before we change directory
 // if we do this in split repository, the original hash is missing there and it will fail
@@ -100,6 +101,7 @@ chdir($buildDirectory);
 
 $restoreChdirMessage = sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory);
 note($restoreChdirMessage);
+setSafeDirectory($formerWorkingDirectory);
 
 
 
@@ -152,6 +154,10 @@ chdir($formerWorkingDirectory);
 $chdirMessage = sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory);
 note($chdirMessage);
 
+function setSafeDirectory(string $directoryFullPath): void
+{
+    exec('git config --global --add safe.directory "' . $directoryFullPath .'"');
+}
 
 function createCommitMessage(string $commitSha): string
 {
