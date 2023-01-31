@@ -89,7 +89,7 @@ exec($commandLine);
 note('Files that will be pushed');
 
 list_directory_files($buildDirectory);
-setSafeDirectory($buildDirectory);
+setSafeDirectory('*');
 
 // WARNING! this function happen before we change directory
 // if we do this in split repository, the original hash is missing there and it will fail
@@ -101,8 +101,6 @@ chdir($buildDirectory);
 
 $restoreChdirMessage = sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory);
 note($restoreChdirMessage);
-setSafeDirectory($formerWorkingDirectory);
-
 
 
 // avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
