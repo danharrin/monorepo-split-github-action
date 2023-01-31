@@ -1,9 +1,9 @@
 # THIS IS BASE IMAGE
 FROM php:8.1-cli-alpine
 
-RUN git config --system --add safe.directory *
-
 RUN apk add --no-cache git
+
+RUN git config --system --add safe.directory *
 
 # directory inside docker
 WORKDIR /splitter
