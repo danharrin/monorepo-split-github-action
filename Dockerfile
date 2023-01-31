@@ -3,7 +3,7 @@ FROM php:8.1-cli-alpine
 
 RUN apk add --no-cache git
 
-RUN git config --global --add safe.directory *
+RUN git config --global --add safe.directory /tmp/monorepo_split/build_directory
 
 # directory inside docker
 WORKDIR /splitter
