@@ -18,6 +18,9 @@ try {
     exit(0);
 }
 
+exec('git config --system --add safe.directory /github/workspace');
+exec('git config --system --add safe.directory /tmp/monorepo_split/build_directory');
+
 setupGitCredentials($config);
 
 
