@@ -1,8 +1,10 @@
 # THIS IS BASE IMAGE
 FROM php:8.0-cli
 
-RUN apt-get update -y
-RUN apt-get install git -y
+# Update package lists and hold the less package to prevent fail
+RUN apt-get update -y && \
+    apt-mark hold less && \
+    apt-get install -y git
 
 # directory inside docker
 WORKDIR /splitter
