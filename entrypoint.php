@@ -56,7 +56,12 @@ if (! $branchSwitchedSuccessfully) {
 
 // While we're in the cloned repository folder, retrieve the commit hash of the last tag,
 // and the most recent commit hash, for later use to determine if a new tag should be pushed
+$lastVersion = file_get_contents('./composer.json');
+$lastVersion = json_decode($lastVersion, true);
+$lastVersion = $lastVersion['version'];
+
 $lastTag = getLatestTag();
+$lastTag = $lastVersion ?? $lastTag;
 $latestTagCommitHash = $lastTag ? getTagCommitHash($lastTag) : '';
 $latestCommitHash = getLatestCommitHash();
 
@@ -131,19 +136,21 @@ if ($changedFiles) {
 
 
 // push tag if present
-if ($config->getTag()) {
-    $changeBetweenLastTag = $latestCommitHash !== $latestTagCommitHash;
-    if (! $changeBetweenLastTag && is_patch($config->getTag())) {
-        note('No change since last tag, skipping patch tag');
-    } else {
-        $message = sprintf('Publishing "%s"', $config->getTag());
+$currentTag = $lastVersion;
+
+if ($currentTag) {
+    // $changeBetweenLastTag = $latestCommitHash !== $latestTagCommitHash;
+    // if (! $changeBetweenLastTag && is_patch($currentTag)) {
+    //     note('No change since last tag, skipping patch tag');
+    // } else {
+        $message = sprintf('Publishing "%s"', $currentTag);
         note($message);
 
-        $commandLine = sprintf('git tag %s -m "%s"', $config->getTag(), $message);
+        $commandLine = sprintf('git tag %s -m "%s"', $currentTag, $message);
         exec_with_note($commandLine);
 
-        exec_with_note('git push --quiet origin ' . $config->getTag());
-    }
+        exec_with_note('git push --quiet origin ' . $currentTag);
+    // }
 }
 
 
