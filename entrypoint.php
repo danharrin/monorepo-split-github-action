@@ -139,18 +139,35 @@ if ($changedFiles) {
 $currentTag = $lastVersion;
 
 if ($currentTag) {
-    // $changeBetweenLastTag = $latestCommitHash !== $latestTagCommitHash;
-    // if (! $changeBetweenLastTag && is_patch($currentTag)) {
-    //     note('No change since last tag, skipping patch tag');
-    // } else {
-        $message = sprintf('Publishing "%s"', $currentTag);
-        note($message);
+    // If the tag looks like a dev tag (e.g., dev-*) and already exists, delete it locally and remotely first
+    if (preg_match('/^dev-/', $currentTag)) {
+        // Check if tag exists locally
+        exec('git tag', $localTags);
+        if (in_array($currentTag, $localTags)) {
+            note(sprintf('Deleting existing local tag "%s"', $currentTag));
+            exec_with_note('git tag -d ' . $currentTag);
+        }
+        // Check if tag exists remotely
+        exec('git ls-remote --tags origin', $remoteTagsRaw);
+        $remoteTagExists = false;
+        foreach ($remoteTagsRaw as $line) {
+            if (preg_match('/refs\\/tags\\/' . preg_quote($currentTag, '/') . '$/', $line)) {
+                $remoteTagExists = true;
+                break;
+            }
+        }
+        if ($remoteTagExists) {
+            note(sprintf('Deleting existing remote tag "%s"', $currentTag));
+            exec_with_note('git push --delete origin ' . $currentTag);
+        }
+    }
+    $message = sprintf('Publishing "%s"', $currentTag);
+    note($message);
 
-        $commandLine = sprintf('git tag %s -m "%s"', $currentTag, $message);
-        exec_with_note($commandLine);
+    $commandLine = sprintf('git tag %s -m "%s"', $currentTag, $message);
+    exec_with_note($commandLine);
 
-        exec_with_note('git push --quiet origin ' . $currentTag);
-    // }
+    exec_with_note('git push --quiet origin ' . $currentTag);
 }
 
 
