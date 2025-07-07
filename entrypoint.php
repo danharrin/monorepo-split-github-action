@@ -31,7 +31,7 @@ $clonedRepository = 'https://' . $hostRepositoryOrganizationName;
 $cloningMessage = sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory);
 note($cloningMessage);
 
-$lastVersion = file_get_contents('packages/'.$config->getPackageDirectory().'/composer.json');
+$lastVersion = file_get_contents($config->getPackageDirectory().'/composer.json');
 $lastVersion = json_decode($lastVersion, true);
 $lastVersion = $lastVersion['version'];
 
