@@ -194,6 +194,6 @@ function setupGitCredentials(Config $config): void
     }
 
     if ($config->getUserEmail()) {
-        execOrDie('git config --global user.email ' . $config->getUserEmail());
+        execOrDie('git config --global user.email ' . escapeshellarg($config->getUserEmail()));
     }
 }
