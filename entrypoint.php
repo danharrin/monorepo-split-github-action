@@ -109,7 +109,7 @@ if ($changedFiles) {
     $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
     note($message);
 
-    execOrDie("git commit --message '{$commitMessage}'");
+    execOrDie('git commit --message ' . escapeshellarg($commitMessage));
     execOrDie('git push --quiet origin ' . $config->getBranch());
 } else {
     note('No files to change');
