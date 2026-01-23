@@ -6,6 +6,17 @@
 
 Do you have [a monorepo](https://tomasvotruba.com/cluster/monorepo-from-zero-to-hero/) project on GitHub and need split packages to many repositories? Add this GitHub Action to your workflow and let it split your packages on every commit and tag.
 
+## Docker Image
+
+The Docker image is published to GitHub Container Registry (ghcr.io) and is available at:
+- `ghcr.io/danharrin/monorepo-split:latest` (latest main branch)
+- `ghcr.io/danharrin/monorepo-split:TAG` (specific tags)
+
+The image is automatically built and published on every push to the main branch and on every tag.
+
+> [!NOTE]
+> The image was previously hosted on Docker Hub as `symplify2/monorepo-split:latest`. It has been migrated to GitHub Container Registry for better integration with the project.
+
 ### How does the Split Result Look Like?
 
 This repository splits tests into [symplify/monorepo-split-github-action-test](https://github.com/symplify/monorepo-split-github-action-test) repository.

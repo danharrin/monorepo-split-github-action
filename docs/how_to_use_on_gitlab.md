@@ -16,7 +16,7 @@ stages:
 split_monorepo:
     stage: split
     image:
-        name: symplify2/monorepo-split:latest
+        name: ghcr.io/danharrin/monorepo-split:latest
         entrypoint: ["/usr/bin/env"]
     # see https://docs.gitlab.com/ee/ci/yaml/#parallel-matrix-jobs
     parallel:

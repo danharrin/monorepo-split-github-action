@@ -1,4 +1,4 @@
-# see .github/workflows/publish_docker_images.yaml:2
+# see .github/workflows/build_docker_images.yaml
 name: Pull Docker Image
 
 on:
@@ -10,11 +10,20 @@ on:
 jobs:
     pull_docker_image:
         runs-on: ubuntu-latest
+        permissions:
+            packages: read
 
         steps:
             -
+                name: 'Login to GitHub Container Registry'
+                uses: docker/login-action@v3
+                with:
+                    registry: ghcr.io
+                    username: ${{ github.actor }}
+                    password: ${{ secrets.GITHUB_TOKEN }}
+            -
                 name: 'Pull Docker image'
-                run: docker pull symplify2/monorepo-split:latest
+                run: docker pull ghcr.io/${{ github.repository_owner }}/monorepo-split:latest
             -
                 name: 'Run Docker image'
-                run: docker run symplify2/monorepo-split
+                run: docker run ghcr.io/${{ github.repository_owner }}/monorepo-split
