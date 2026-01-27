@@ -20,7 +20,7 @@ jobs:
                 with:
                     registry: ghcr.io
                     username: ${{ github.actor }}
-                    password: ${{ secrets.GITHUB_TOKEN }}
+                    password: ${{ secrets.ACCESS_TOKEN }}
             -
                 name: 'Pull Docker image'
                 run: docker pull ghcr.io/${{ github.repository_owner }}/monorepo-split:latest
