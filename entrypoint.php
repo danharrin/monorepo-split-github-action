@@ -46,11 +46,12 @@ exec_with_output_print('git fetch');
 note(sprintf('Trying to checkout %s branch', $config->getBranch()));
 
 // if the given branch doesn't exist it returns empty string
-$branchSwitchedSuccessfully = execOrDie(sprintf('git checkout %s', $config->getBranch())) !== '';
+exec(sprintf('git checkout %s', $config->getBranch()), $output, $exitCode);
+$branchSwitchedSuccessfully = ($exitCode === 0);
 
-// if the branch doesn't exist we creat it and push to origin
+// if the branch doesn't exist we create it and push to origin
 // otherwise we just checkout to the given branch
-if (!$branchSwitchedSuccessfully) {
+if (! $branchSwitchedSuccessfully) {
     note(sprintf('Creating branch "%s" as it doesn\'t exist', $config->getBranch()));
 
     exec_with_output_print(sprintf('git checkout -b %s', $config->getBranch()));
@@ -165,10 +166,11 @@ function list_directory_files(string $directory): void
 
 /********************* helper functions *********************/
 
+/** @phpstan-ignore-next-line */
 function execOrDie(string $command, ?array &$output = []): string|false
 {
     $result = exec($command, $output, $errorCode);
-    if (0 === $errorCode) {
+    if ($errorCode === 0) {
         return $result;
     }
 
