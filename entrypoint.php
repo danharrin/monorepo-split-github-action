@@ -15,7 +15,7 @@ try {
     $config = $configFactory->create(getenv());
 } catch (ConfigurationException $configurationException) {
     error($configurationException->getMessage());
-    exit(0);
+    exit(1);
 }
 
 exec('git config --system --add safe.directory /github/workspace');
