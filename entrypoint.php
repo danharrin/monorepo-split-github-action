@@ -15,7 +15,7 @@ try {
     $config = $configFactory->create(getenv());
 } catch (ConfigurationException $configurationException) {
     error($configurationException->getMessage());
-    exit(0);
+    exit(1);
 }
 
 exec('git config --system --add safe.directory /github/workspace');
@@ -195,7 +195,7 @@ function exec_with_output_print(string $commandLine): void
 function setupGitCredentials(Config $config): void
 {
     if ($config->getUserName()) {
-        execOrDie('git config --global user.name ' . $config->getUserName());
+        execOrDie('git config --global user.name ' . escapeshellarg($config->getUserName()));
     }
 
     if ($config->getUserEmail()) {
