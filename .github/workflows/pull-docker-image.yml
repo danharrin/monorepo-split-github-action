@@ -1,0 +1,32 @@
+# see .github/workflows/build-docker-images.yml
+name: pull-docker-image
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  pull-docker-image:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Pull Docker image
+        run: docker pull ghcr.io/${{ github.repository_owner }}/monorepo-split:latest
+
+      - name: Run Docker image
+        run: docker run ghcr.io/${{ github.repository_owner }}/monorepo-split

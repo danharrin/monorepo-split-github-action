@@ -1,0 +1,40 @@
+name: split-test
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  split-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      # run action.yaml in the root directory
+      # see https://github.community/t/self-reference-an-action-for-testing/17891
+      - uses: "./"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          package_directory: 'tests/packages/some-package'
+          repository_organization: 'symplify'
+          repository_name: 'monorepo-split-github-action-test'
+
+          user_name: 'kaizen-ci'
+          user_email: 'info@kaizen-ci.org'
