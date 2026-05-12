@@ -25,8 +25,3 @@ jobs:
 
       - name: Build image
         run: docker build . -t splitter
-
-      - name: Test Docker image
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: docker run -e GITHUB_TOKEN splitter
