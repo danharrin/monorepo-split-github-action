@@ -28,7 +28,7 @@ jobs:
 
       # run action.yaml in the root directory
       # see https://github.community/t/self-reference-an-action-for-testing/17891
-      - uses: "./"
+      - uses: "$/"
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
